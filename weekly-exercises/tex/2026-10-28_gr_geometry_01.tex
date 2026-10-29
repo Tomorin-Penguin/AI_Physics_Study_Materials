@@ -1,0 +1,395 @@
+% !TeX program = xelatex
+% UTF-8. Compile twice with XeLaTeX.
+% Set \showsolutionsfalse below to create an exercise-only version.
+\documentclass[11pt,a4paper,fontset=fandol]{ctexart}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parskip}{0.35em}
+\setlist{itemsep=0.25em,topsep=0.4em}
+\allowdisplaybreaks[2]
+\newif\ifshowsolutions
+\showsolutionstrue
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\R}{\mathbb{R}}
+\title{引力研究微分几何短练习\\[0.4em]
+\large 第01期：推前与拉回——从链式法则到诱导度规}
+\author{}
+\date{2026年10月28日}
+
+\begin{document}
+\maketitle
+\noindent\textbf{学习目标：}
+从映射与切向量的定义出发，计算一形式和度规的拉回，
+并区分嵌入微分、时空度规、诱导度规的非退化性。
+\textbf{前置知识：} 多元微积分、切向量与协变张量的基本含义、基础GR。
+\textbf{练习时间：} 约30--45分钟；建议先做三道题，再看解答。
+
+\section{核心概念}
+设$\Phi:M\to N$是光滑映射，$p\in M$，$q=\Phi(p)$。
+切向量$X_p\in T_pM$作用于函数，给出方向导数。
+其\textbf{推前}是目标空间中的切向量，定义为
+\begin{equation}
+  (\Phi_{*p}X_p)[f]=X_p[f\circ\Phi],
+  \qquad f\in C^\infty(N).
+  \label{eq:push}
+\end{equation}
+映射将运动方向推向目标空间；目标空间中的测量规则可以拉回原空间。
+一形式$\alpha_q\in T_q^*N$输入一个切向量并输出一个数。
+其\textbf{拉回}定义为
+\begin{equation}
+  (\Phi^*\alpha)_p(X_p)
+  =\alpha_{\Phi(p)}(\Phi_{*p}X_p).
+  \label{eq:pull}
+\end{equation}
+因此，拉回的操作是：先把所有输入向量推前，再交给原来的张量。
+对二阶协变张量（特别是度规）同样有
+\begin{equation}
+  (\Phi^*g)_p(X_p,Y_p)
+  =g_{\Phi(p)}(\Phi_*X_p,\Phi_*Y_p).
+  \label{eq:pullmetric}
+\end{equation}
+这些定义不要求$\Phi$可逆，也不要求流形已带有度规。
+切向量总能逐点推前；但整个向量场未必能推成$N$上良好定义的向量场。
+例如，多个源点映到同一目标点时，其向量的像可能不同。
+一般情况下，逐点推前首先给出沿$\Phi$的向量场。
+相关概念也为用流定义Lie导数作准备，参见文献\cite{tong2}。
+
+\section{练习}
+\subsection*{练习1：从定义到坐标公式}
+源空间用坐标$u^a$，目标空间用坐标$x^\mu$，
+映射写成$x^\mu=\Phi^\mu(u)$。设
+\[
+ X=X^a\partial_{u^a},\qquad
+ \alpha=\alpha_\mu\,\dd x^\mu .
+\]
+重复指标求和，且函数微分定义为$\dd f(X)=X[f]$。
+\begin{enumerate}[label=(\arabic*)]
+  \item 从定义推导$\Phi_*X$和$\Phi^*\alpha$的坐标表达式。
+  \item 核对配对恒等式
+  $(\Phi^*\alpha)_p(X_p)=\alpha_{\Phi(p)}(\Phi_*X_p)$。
+  \item 对任意$f\in C^\infty(N)$证明
+  \[
+    \boxed{\Phi^*(\dd f)=\dd(f\circ\Phi)}.
+  \]
+\end{enumerate}
+
+\subsection*{练习2：一形式与面积形式的拉回}
+取极坐标映射
+\[
+ \Phi(r,\varphi)=(r\cos\varphi,r\sin\varphi),
+ \qquad r>0,
+\]
+其中$\varphi$限制在一个局部坐标区间内。
+目标平面上的形式为
+\[
+ \alpha=-y\,\dd x+x\,\dd y,\qquad
+ \omega=\dd x\wedge\dd y .
+\]
+\begin{enumerate}[label=(\arabic*)]
+  \item 计算$\Phi_*\partial_r$与$\Phi_*\partial_\varphi$。
+  \item 计算$\Phi^*\alpha$，并用配对关系检查结果。
+  \item 计算$\Phi^*\omega$，解释径向因子的来源。
+\end{enumerate}
+所需楔积定义为
+\[
+ (\beta\wedge\gamma)(U,V)
+ =\beta(U)\gamma(V)-\beta(V)\gamma(U).
+\]
+因此$\dd r\wedge\dd r=0$，
+$\dd\varphi\wedge\dd r=-\dd r\wedge\dd\varphi$。
+
+\subsection*{练习3：黑洞视界的诱导度规}
+取$G=c=1$、质量参数$m>0$和度规号差$(-+++)$。
+Schwarzschild时空在入射Eddington--Finkelstein坐标中的线元为
+\begin{equation}
+ \dd s^2=-F(r)\,\dd v^2+2\,\dd v\,\dd r
+  +r^2(\dd\theta^2+\sin^2\theta\,\dd\varphi^2),
+ \qquad F(r)=1-\frac{2m}{r}.
+ \label{eq:ef}
+\end{equation}
+这组坐标在未来视界$r=2m$处保持正则，参见文献\cite{tong6}。
+固定$R>0$，定义超曲面嵌入
+\[
+ \iota_R:\Sigma_R\hookrightarrow M,\qquad
+ (v,\theta,\varphi)\mapsto(v,R,\theta,\varphi).
+\]
+计算可在$0<\theta<\pi$的球面坐标片内进行。
+\begin{enumerate}[label=(\arabic*)]
+  \item 计算$h=\iota_R^*g$。
+  \item 判断$R>2m$与$R=2m$时$h$是否退化。
+  \item 在$R=2m$处，嵌入的微分是否失去秩？时空度规是否退化？
+  用计算解释诱导度规的结果为何不与它们矛盾。
+\end{enumerate}
+
+\ifshowsolutions
+\clearpage
+\section{详细解答}
+\subsection{练习1}
+对任意目标空间函数$f$，式\eqref{eq:push}给出
+\begin{align}
+ (\Phi_{*p}X_p)[f]
+ &=X_p[f\circ\Phi]\notag\\
+ &=X^a(p)\frac{\partial}{\partial u^a}f(\Phi(u))\bigg|_p\notag\\
+ &=X^a(p)\frac{\partial\Phi^\mu}{\partial u^a}\bigg|_p
+   \frac{\partial f}{\partial x^\mu}\bigg|_{\Phi(p)}.
+\end{align}
+最后一行是一个目标空间切向量作用于$f$，所以
+\begin{equation}
+ \boxed{\Phi_{*p}X_p
+ =X^a(p)\,\partial_a\Phi^\mu(p)\,
+   \partial_{x^\mu}\big|_{\Phi(p)}.}
+\end{equation}
+把它代入拉回定义：
+\begin{align}
+ (\Phi^*\alpha)_p(X_p)
+ &=\alpha_{\Phi(p)}(\Phi_*X_p)\notag\\
+ &=\alpha_\mu(\Phi(p))X^a(p)\partial_a\Phi^\mu(p)\notag\\
+ &=\left[(\alpha_\mu\circ\Phi)\partial_a\Phi^\mu\right]_p X^a(p).
+\end{align}
+这对每个$X_p$都成立，而$\dd u^a(X_p)=X^a(p)$，故
+\begin{equation}
+ \boxed{\Phi^*\alpha
+ =(\alpha_\mu\circ\Phi)\partial_a\Phi^\mu\,\dd u^a.}
+\end{equation}
+这一计算同时核对了配对恒等式：先拉回一形式再求值，
+或先推前向量再求值，得到同一个数。
+
+下面逐步证明函数微分的自然性：
+\begin{align}
+ [\Phi^*(\dd f)]_p(X_p)
+ &=(\dd f)_{\Phi(p)}(\Phi_*X_p)
+ &&\text{（拉回定义）}\notag\\
+ &=(\Phi_*X_p)[f]
+ &&\text{（函数微分定义）}\notag\\
+ &=X_p[f\circ\Phi]
+ &&\text{（推前定义）}\notag\\
+ &=[\dd(f\circ\Phi)]_p(X_p).
+\end{align}
+两个一形式在任意点、任意切向量上的取值均相同，因而它们相等。
+特别地，令$f=x^\mu$，便得到计算规则
+\begin{equation}
+ \boxed{\Phi^*(\dd x^\mu)=\dd\Phi^\mu.}
+ \label{eq:basicrule}
+\end{equation}
+
+\subsection{练习2}
+对映射的两个坐标函数求导，
+\begin{align}
+ \Phi_*\partial_r
+ &=\cos\varphi\,\partial_x+\sin\varphi\,\partial_y,\\
+ \Phi_*\partial_\varphi
+ &=-r\sin\varphi\,\partial_x+r\cos\varphi\,\partial_y.
+\end{align}
+由式\eqref{eq:basicrule}，
+\begin{align}
+ \Phi^*(\dd x)
+ &=\dd(r\cos\varphi)
+ =\cos\varphi\,\dd r-r\sin\varphi\,\dd\varphi,\\
+ \Phi^*(\dd y)
+ &=\dd(r\sin\varphi)
+ =\sin\varphi\,\dd r+r\cos\varphi\,\dd\varphi.
+\end{align}
+系数函数也要复合：
+$\Phi^*x=r\cos\varphi$，$\Phi^*y=r\sin\varphi$。
+因此
+\begin{align}
+ \Phi^*\alpha
+ ={}&-r\sin\varphi
+       (\cos\varphi\,\dd r-r\sin\varphi\,\dd\varphi)\notag\\
+    &+r\cos\varphi
+       (\sin\varphi\,\dd r+r\cos\varphi\,\dd\varphi)\notag\\
+ ={}&(-r\sin\varphi\cos\varphi+r\cos\varphi\sin\varphi)\,\dd r\notag\\
+    &+r^2(\sin^2\varphi+\cos^2\varphi)\,\dd\varphi\notag\\
+ ={}&\boxed{r^2\,\dd\varphi}.
+\end{align}
+用$\partial_\varphi$作配对检查，左边为
+$(\Phi^*\alpha)(\partial_\varphi)=r^2$；
+在目标空间中则为
+\begin{align}
+ \alpha(\Phi_*\partial_\varphi)
+ &=(-y\,\dd x+x\,\dd y)
+  (-r\sin\varphi\,\partial_x+r\cos\varphi\,\partial_y)\notag\\
+ &=r^2\sin^2\varphi+r^2\cos^2\varphi=r^2.
+\end{align}
+
+为计算面积形式，先从定义核对拉回与楔积的关系。
+对任意$U,V\in T_pM$，
+\begin{align}
+ [\Phi^*(\beta\wedge\gamma)](U,V)
+ &=(\beta\wedge\gamma)(\Phi_*U,\Phi_*V)\notag\\
+ &=\beta(\Phi_*U)\gamma(\Phi_*V)
+   -\beta(\Phi_*V)\gamma(\Phi_*U)\notag\\
+ &=[(\Phi^*\beta)\wedge(\Phi^*\gamma)](U,V).
+\end{align}
+因此
+\begin{align}
+ \Phi^*(\dd x\wedge\dd y)
+ &=(\Phi^*\dd x)\wedge(\Phi^*\dd y)\notag\\
+ &=(\cos\varphi\,\dd r-r\sin\varphi\,\dd\varphi)
+   \wedge(\sin\varphi\,\dd r+r\cos\varphi\,\dd\varphi)\notag\\
+ &=r\cos^2\varphi\,\dd r\wedge\dd\varphi
+   -r\sin^2\varphi\,\dd\varphi\wedge\dd r\notag\\
+ &=\boxed{r\,\dd r\wedge\dd\varphi}.
+\end{align}
+其中径向因子来自映射的面积伸缩：
+\begin{equation}
+ \det\begin{pmatrix}
+ \partial_r x&\partial_\varphi x\\
+ \partial_r y&\partial_\varphi y
+ \end{pmatrix}
+ =
+ \det\begin{pmatrix}
+ \cos\varphi&-r\sin\varphi\\
+ \sin\varphi&r\cos\varphi
+ \end{pmatrix}=r.
+\end{equation}
+这给出了极坐标积分中径向因子的几何来源。
+
+\subsection{练习3}
+先逐项拉回坐标函数：
+\[
+ v\circ\iota_R=v,\qquad r\circ\iota_R=R.
+\]
+$R$是$\Sigma_R$上的常数，故
+\[
+ \iota_R^*(\dd v)=\dd v,\qquad
+ \boxed{\iota_R^*(\dd r)=\dd R=0}.
+\]
+另外，
+$\iota_R^*(\dd\theta)=\dd\theta$，
+$\iota_R^*(\dd\varphi)=\dd\varphi$。
+所以
+\begin{equation}
+ \boxed{h=-F(R)\,\dd v^2
+       +R^2\,\dd\theta^2+R^2\sin^2\theta\,\dd\varphi^2.}
+ \label{eq:induced}
+\end{equation}
+这里$\dd v^2$表示$\dd v\otimes\dd v$；
+线元中的$2\,\dd v\,\dd r$表示
+$\dd v\otimes\dd r+\dd r\otimes\dd v$。
+度规使用对称张量积，而不是楔积。
+
+当$R>2m$时，$F(R)>0$，且
+\[
+ (h_{ab})=\operatorname{diag}(-F(R),R^2,R^2\sin^2\theta).
+\]
+它有一个负方向和两个正方向；在所选坐标片中，
+\[
+ \det h=-F(R)R^4\sin^2\theta\ne0.
+\]
+因此$\Sigma_R$是类时超曲面，其诱导度规非退化。
+
+当$R=2m$时，
+\[
+ h=(2m)^2(\dd\theta^2+\sin^2\theta\,\dd\varphi^2).
+\]
+对任意
+$Y=A\partial_v+B\partial_\theta+C\partial_\varphi\in T\Sigma_{2m}$，
+都有
+\[
+ h(\partial_v,Y)=0.
+\]
+非零向量$\partial_v$属于$h$的核，故诱导度规退化。
+
+另一方面，嵌入的微分仍满足
+\[
+ \iota_{R*}\partial_v=\partial_v,\qquad
+ \iota_{R*}\partial_\theta=\partial_\theta,\qquad
+ \iota_{R*}\partial_\varphi=\partial_\varphi.
+\]
+其像仍有三个线性无关方向，秩为$3$。
+环境时空度规的$v,r$子块为
+\[
+ \begin{pmatrix}-F(r)&1\\1&0\end{pmatrix},
+ \qquad \det=-1,
+\]
+所以在视界处依然可逆。
+角向子块也在所选坐标片内非退化，故完整时空度规非退化。
+特别地，
+\[
+ g(\partial_v,\partial_r)=1.
+\]
+$\partial_v$只与视界上的所有切向方向正交，
+没有与全部时空方向正交；$\partial_r$不属于$T\Sigma_{2m}$，
+因为$\dd r(\partial_r)=1$而切向量必须满足$\dd r(Y)=0$。
+
+还可直接核对零超曲面的法向量。
+$v,r$子块的逆矩阵为
+\[
+ \begin{pmatrix}0&1\\1&F(r)\end{pmatrix}.
+\]
+因而法向余向量$n=\dd r$的度规对偶为
+\[
+ n^\sharp=g^{\mu r}\partial_\mu=\partial_v+F(r)\partial_r.
+\]
+在视界上$F=0$，于是$n^\sharp=\partial_v$同时是切向量，
+且对任何切向量$Y$，
+$g(n^\sharp,Y)=n(Y)=\dd r(Y)=0$。
+这解释了诱导度规为何存在非零核。
+
+需要区别两种性质：
+\[
+ \underbrace{h(X,Y)=0\ \text{对所有 }Y}_{\text{非零核向量，表明退化}}
+ \qquad\text{与}\qquad
+ \underbrace{h(X,X)=0}_{\text{零向量，不足以表明退化}},
+ \quad X\ne0.
+\]
+非退化的Lorentz度规可以含有零向量。
+本题视界诱导度规满足前一种更强的性质。
+
+\section{引力应用与工具卡}
+\textbf{具体应用：}
+计算有限半径边界、黑洞视界或嵌入曲面的内禀几何时，
+首先拉回时空度规。
+对于零超曲面，不能假定诱导三维度规存在普通逆矩阵；
+视界的二维球面截面仍有非退化度规，
+沿生成线的方向需要单独处理。
+这种区分是后续研究零边界、视界生成元和边界荷的基础。
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+ \item \textbf{拉回一形式：}
+ 系数函数先复合，基底使用$\Phi^*(\dd x^\mu)=\dd\Phi^\mu$。
+ \item \textbf{拉回度规：}
+ 若嵌入写成$x^\mu=X^\mu(y^a)$，则
+ \[
+ h_{ab}=g_{\mu\nu}(X(y))
+ \frac{\partial X^\mu}{\partial y^a}
+ \frac{\partial X^\nu}{\partial y^b}.
+ \]
+ 该式来自把$\partial_{y^a}$与$\partial_{y^b}$分别推前后代入$g$。
+ \item \textbf{分别检查三个对象：}
+ 映射微分的秩、环境度规的非退化性、诱导度规的非退化性。
+ 它们是不同的问题。
+\end{enumerate}
+
+\textbf{与后续单元的联系：}
+本期的$\Phi^*(\dd f)=\dd(\Phi^*f)$将在外微分单元中推广到任意微分形式。
+之后令$\Phi$成为向量场生成的一参数流，便可以通过拉回的变化率定义Lie导数。
+本期不把这一预告当作已证明的结论。
+
+\textbf{下一单元：}
+楔积与外微分的实际运算，特别是$r\,\dd\varphi$这样的非坐标余标架，
+为Cartan结构方程准备计算基础。
+\fi
+
+\begin{thebibliography}{9}
+ \bibitem{tong2}
+ David Tong, \emph{General Relativity},
+ Chapter 2: Introducing Differential Geometry.
+ \url{https://www.davidtong.org/teaching/general-relativity/grhtml/S2}.
+ \bibitem{tong6}
+ David Tong, \emph{General Relativity},
+ Section 6.1.3: Eddington--Finkelstein Coordinates.
+ \url{https://davidtong.org/teaching/general-relativity/grhtml/S6}.
+\end{thebibliography}
+
+\noindent\textbf{系列记录：}
+第01期；核心技能为推前、拉回、诱导度规；
+题目指纹为链式法则、极坐标形式拉回、Schwarzschild视界诱导度规。
+本期材料已提供，用户完成与掌握状态待反馈。
+下一期为第02单元：楔积与外微分的实际运算。
+
+\end{document}
+
