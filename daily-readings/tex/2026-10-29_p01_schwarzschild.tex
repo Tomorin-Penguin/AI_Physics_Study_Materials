@@ -1,0 +1,113 @@
+% Compile with XeLaTeX. Install Noto Sans CJK SC or FandolSong.
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\IfFontExistsTF{Noto Sans CJK SC}
+  {\setmainfont{Noto Sans CJK SC}}
+  {\IfFontExistsTF{FandolSong-Regular}
+     {\setmainfont{FandolSong-Regular}}
+     {\setmainfont{NotoSansCJKsc-Regular.otf}}}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip=0pt plus 1pt
+\usepackage[margin=21mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,xcolor,hyperref,fancyhdr}
+\hypersetup{
+  colorlinks=true,urlcolor=blue!55!black,
+  pdftitle={P01 Schwarzschild几何：径向光线与坐标奇性},
+  pdfauthor={},pdfsubject={黑洞几何学习导读},pdfkeywords={Schwarzschild,radial null curves,curvature}
+}
+\definecolor{ink}{HTML}{18394B}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small P01\quad 黑洞几何与热力学}
+\fancyhead[R]{\small 2026-10-29}
+\fancyfoot[C]{\small \thepage}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\linespread{1.22}
+\newcommand{\topic}[1]{\vspace{6pt}{\large\color{ink}#1}\par}
+\newcommand{\dd}{\mathrm d}
+\begin{document}
+{\LARGE\color{ink}Schwarzschild 几何}\\[5pt]
+{\large 径向光线与坐标奇性}
+\par
+{\small 阅读约 5--10 分钟；连同推导与练习共约 60--75 分钟。}
+
+\topic{学习目标与范围}
+本单元考察一个具体问题：度规分量在某处表现异常时，怎样区分坐标失效与曲率发散？目标是从度规推导径向光线方程，解释坐标速度与局域测量的区别，并明确曲率标量诊断的逻辑边界。
+
+\topic{1\quad 从度规开始}
+取 \(c=1\)、号差 \((-+++)\)，质量 \(M>0\)，记 \(r_s=2GM\)。Schwarzschild 度规为
+\[
+\dd s^2=-f(r)\dd t^2+\frac{\dd r^2}{f(r)}+r^2\dd\Omega_2^2,
+\qquad f(r)=1-\frac{r_s}{r},
+\]
+其中 \(\dd\Omega_2^2=\dd\theta^2+\sin^2\theta\,\dd\phi^2\)。\(r\) 是面积半径：对称二球的面积为 \(4\pi r^2\)，一般不等于径向固有距离；\(t\) 在无穷远处按静止钟归一化。以下光线计算先限于外部区域 \(r>r_s\)。
+
+当 \(r\to r_s^+\) 时，\(g_{rr}\to\infty\)。由于度规分量依赖坐标，这一发散本身尚不能证明存在曲率奇性。
+
+\topic{2\quad 推导径向光线}
+径向运动满足 \(\dd\theta=\dd\phi=0\)。光线切向量为零型，故
+\[
+0=-f\,\dd t^2+\frac{\dd r^2}{f}
+\quad\Longrightarrow\quad
+\left(\frac{\dd r}{\dd t}\right)^2=f^2
+\quad\Longrightarrow\quad
+\boxed{\frac{\dd r}{\dd t}=\pm f(r)}.
+\]
+在外部区域，未来指向对应 \(\dd t>0\)，正号向外、负号向内。这一步确定径向光线的轨迹，不规定仿射参数。
+
+把微分方程写成可积分的形式：
+\[
+\frac{\dd t}{\dd r}=\pm\frac1f
+=\pm\left(1+\frac{r_s}{r-r_s}\right).
+\]
+因此
+\[
+t=\pm r_*+C,\qquad
+r_*=r+r_s\ln\!\left(\frac r{r_s}-1\right).
+\]
+这里 \(C\) 是积分常数，对数的自变量无量纲。对入射光线取负号；当 \(r\to r_s^+\) 时，\(r_*\to-\infty\)，所以 \(t\to+\infty\)。这揭示 Schwarzschild 时间在视界附近的局限，尚不能据此断言光线无法穿过视界。[1,2]
+
+\newpage
+\topic{3\quad 坐标速度与局域光速}
+在任一外部事件处，静止观测者使用的局域正交余标架给出
+\[
+\dd\hat t=\sqrt f\,\dd t,\qquad
+\dd\hat r=\frac{\dd r}{\sqrt f}.
+\]
+带帽记号表示标架测量分量，并非定义一组全局新坐标。于是沿径向光线，
+\[
+\left|\frac{\dd\hat r}{\dd\hat t}\right|
+=\frac1f\left|\frac{\dd r}{\dd t}\right|=1.
+\]
+这里的 \(\dd\hat t\) 不是光子自身的固有时；光线上的固有时为零。静止观测者只适用于 \(r>r_s\)，不能把该标架直接延伸到视界上。因此，\(\dd r/\dd t\to0\) 是坐标速度的性质，与局域光速恒定相容。
+
+\topic{4\quad 曲率诊断能证明什么}
+真空中 \(R_{\mu\nu}=0\)，却不意味着整个 Riemann 张量为零。本单元引用 Kretschmann 标量的已知结果，不要求重算全部联络：
+\[
+\mathcal K\equiv R_{\mu\nu\rho\sigma}R^{\mu\nu\rho\sigma}
+=\frac{48G^2M^2}{r^6}=\frac{12r_s^2}{r^6}.
+\]
+在 \(r\to0\) 时，\(\mathcal K\to\infty\)，这一曲率发散不能通过换坐标消除；而
+\[
+\mathcal K(r_s)=\frac{12}{r_s^4}
+\]
+保持有限。一个曲率标量有限，仍不足以证明那里能够光滑延拓。Schwarzschild 的视界坐标奇性确实可去除，但需要构造正则坐标验证，下一单元将完成这一步。[1,2]
+
+事件视界还涉及整个时空的因果结构，不能仅凭某个坐标中的 \(g_{tt}=0\) 来定义；其位置将在延拓与因果分析中进一步确认。
+
+\topic{独立计算与完成标准}
+脱离材料重做径向光线方程及其积分。对同一条入射光线令 \(r=r_s+\epsilon\)，其中 \(0<\epsilon\ll r_s\)，验证
+\[
+t=-r_s\ln(\epsilon/r_s)+C'+O(\epsilon).
+\]
+用两三句话解释：为什么这不能证明光线无法穿过视界？为什么 \(\mathcal K(r_s)\) 有限也还不够？能独立重现计算并说清两处逻辑限制，即达到本单元目标。
+
+\topic{深入阅读}
+{\small
+[1] David Tong, General Relativity, \S6.1.2；近视界 Rindler 推导本次可选读。\par
+\url{https://www.damtp.cam.ac.uk/user/tong/gr/grhtml/S6.html}\par
+[2] H. S. Reall, Black Holes (2024), \S2.4 的径向光线、\S2.13 的奇性讨论。该讲义取 \(G=1\)，其中质量参数对应本文的 \(GM\)。坐标变换细节留至下一单元。\par
+\url{https://www.damtp.cam.ac.uk/user/hsr1000/black_holes_lectures_2024.pdf}
+}
+\end{document}
+
