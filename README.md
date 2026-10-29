@@ -1,25 +1,8 @@
-# 物理学学习材料
+# AI 物理学学习材料
 
-用于保存 AI 辅助编写的每周习题和每日阅读材料，包括可编辑的 LaTeX 源文件与编译后的 PDF。
+保存 AI 辅助编写的每周习题和每日阅读材料，以及对应的 LaTeX 源文件与 PDF。
 
-## 材料分区
-
-| 分区 | TeX 源文件 | PDF 文档 |
-| --- | --- | --- |
-| 每周习题 | [weekly-exercises/tex/](weekly-exercises/tex/) | [weekly-exercises/pdf/](weekly-exercises/pdf/) |
-| 每日阅读材料 | [daily-readings/tex/](daily-readings/tex/) | [daily-readings/pdf/](daily-readings/pdf/) |
-
-## 文件命名
-
-同一份材料的 `.tex` 与 `.pdf` 使用相同的文件名主体，日期采用 `YYYY-MM-DD`。
-
-- 每周习题：`YYYY-MM-DD_topic.tex` 与 `YYYY-MM-DD_topic.pdf`，日期为该期习题的发布日期。
-- 每日阅读材料：`YYYY-MM-DD_topic.tex` 与 `YYYY-MM-DD_topic.pdf`，日期为当天阅读材料的日期。
-
-材料增多时，可在对应的 `tex/` 与 `pdf/` 下建立相同的年份子目录。LaTeX 编译产生的临时文件不作为材料归档。
-
-## 已归档材料
-
-| 日期 | 类型 | 材料 | TeX 源文件 | PDF 文档 |
-| --- | --- | --- | --- | --- |
-| 2026-10-28 | 每周习题 | 第01期：推前与拉回——从链式法则到诱导度规（含解答） | [TeX](weekly-exercises/tex/2026-10-28_gr_geometry_01.tex) | [PDF](weekly-exercises/pdf/2026-10-28_gr_geometry_01.pdf) |
+| 分区 | 内容 |
+| --- | --- |
+| [每周习题](weekly-exercises/README.md) | 按年份、日期和期数查找练习、相关知识点及文件。 |
+| [每日阅读材料](daily-readings/README.md) | 按年份、日期和主题查找阅读材料、相关知识点及文件。 |
