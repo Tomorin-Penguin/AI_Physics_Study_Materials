@@ -1,0 +1,344 @@
+% Compile with XeLaTeX twice. Requires Noto Sans CJK SC or FandolSong.
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=21mm,top=20mm,bottom=21mm,headheight=16pt]{geometry}
+\usepackage{fontspec}
+\IfFontExistsTF{Noto Sans CJK SC}
+  {\setmainfont{Noto Sans CJK SC}[AutoFakeBold=2,AutoFakeSlant=0.15]}
+  {\setmainfont{FandolSong-Regular}[AutoFakeBold=2,AutoFakeSlant=0.15]}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip=0pt plus 1pt
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{xcolor,enumitem,booktabs,tabularx,fancyhdr,lastpage}
+\usepackage{hyperref}
+\definecolor{ink}{HTML}{18394B}
+\definecolor{pale}{HTML}{EDF3F5}
+\hypersetup{colorlinks=true,urlcolor=ink,linkcolor=ink,
+ pdftitle={C01 生成泛函、源与关联函数},pdfauthor={},
+ pdfsubject={欧氏路径积分中的均值、涨落、响应与全息字典}}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\color{ink}C01\quad 生成泛函、源与关联函数}
+\fancyhead[R]{\small 2026-11-03}
+\fancyfoot[L]{\small 理论物理阅读材料}
+\fancyfoot[R]{\small\thepage\ /\ \pageref*{LastPage}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+\linespread{1.12}
+\setlist{nosep,leftmargin=1.7em,topsep=0.35em}
+\setlength{\fboxsep}{7pt}
+\newcommand{\dd}{\mathrm d}
+\newcommand{\OO}{\mathcal O}
+\newcommand{\ZZ}{\mathcal Z}
+\newcommand{\intx}{\int\dd^d x\,}
+\newcommand{\avg}[1]{\left\langle #1\right\rangle}
+\newcommand{\physicsnote}[1]{\par\smallskip\noindent\colorbox{pale}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}{\textbf{物理解释}\quad #1}}\par\smallskip}
+\newcommand{\question}[1]{\textbf{本节要回答：}#1\par}
+\newcommand{\step}[1]{\textbf{#1}\par}
+\begin{document}
+\begin{center}
+{\LARGE\bfseries\color{ink}C01：生成泛函、源与关联函数}\\[0.55em]
+{\large 从改变构型权重，到读取均值、涨落与响应}\\[0.35em]
+{\small 2026-11-03\quad 主线含练习约 75--100 分钟；第 8 节选读约 15--20 分钟}
+\end{center}
+\textbf{本次目标。}假定已经见过路径积分，不从时间切片重新开始。重点是亲手推导
+\(Z[J]\)、\(W[J]\) 的源导数，理解“连通”为什么出现，并把这套语言接到全息中的边界源与响应。第 9 节用于检验理解，不要求一次完成所有延伸内容。
+
+\section{源究竟改变了什么？}
+\question{为什么先人为加入一个 \(J\)，再对它求导？}
+采用欧氏形式、\(\hbar=1\)，并先考虑一个实的玻色标量算符 \(\OO[\phi](x)\)。约定
+\begin{equation}\label{eq:definitions}
+ \ZZ[J]=\int\mathcal D\phi\,
+ e^{-S_E[\phi]+\intx J(x)\OO(x)},\qquad
+ Z[J]=\frac{\ZZ[J]}{\ZZ[0]},\qquad W[J]=\ln Z[J].
+\end{equation}
+这里 \(x\) 包括欧氏时间；\(\intx\) 是整个欧氏时空的积分。因而 \(Z[0]=1\)、\(W[0]=0\)。以下把状态、边界条件与正规化方式固定；\(J\) 只通过写出的线性耦合进入，\(\OO\) 和测度不另含 \(J\)。
+
+\(J(x)\) 是\textbf{外部指定的函数}，不是本次路径积分中的积分变量。每给定一个 \(J\)，就得到一个不同的构型权重。例如，在实的正权重情形，正的局部 \(J\) 会相对提高该处 \(\OO\) 较大构型的权重。改变 \(J\) 后重新平均，便能探查系统愿意怎样改变。
+
+若 \(\OO\) 是磁化密度，\(J\) 可以是磁场；哈密顿量扰动写为
+\(H_J=H_0-\int\dd^{d-1}\mathbf x\,J\OO\)，对应欧氏指数中的 \(+\int J\OO\)。对于其他算符，\(J\) 也可以只是计算用的探针，不一定能在实验中独立调节。
+
+\physicsnote{生成泛函记录的是：对各种源分布施加扰动时，路径积分如何变化。它把逐个计算的关联函数，组织成同一个泛函对外部参数的各阶导数。\(Z[0]=1\) 只是归一化选择，不表示无源系统没有能量或涨落。}
+\textbf{符号提醒。}本文始终使用欧氏 \(W=\ln Z\) 与指数中的 \(+J\OO\)。Lorentzian 文献常用 \(W=-i\ln Z\)，不能直接搬用其中的 \(i\) 和符号。在质量量纲下，若 \([\OO]=\Delta\)，则 \([J]=d-\Delta\)，使 \(\int J\OO\) 无量纲。
+
+\newpage
+\section{一次源微分，为什么插入一个算符？}
+\question{“对源求导”怎样从路径积分中取出某一点的 \(\OO\)？}
+先把泛函微分当作多元微分的连续版本。定义
+\begin{equation}
+ \delta F[J]=\int\dd^d x\,\frac{\delta F[J]}{\delta J(x)}\,\delta J(x),
+ \qquad \frac{\delta J(y)}{\delta J(x)}=\delta^{(d)}(y-x).
+\end{equation}
+因此 \(\delta(\int J\OO)/\delta J(x)=\OO(x)\)。这一步与普通公式
+\(\partial e^{\sum_i J_i O_i}/\partial J_k=O_k e^{\sum_iJ_iO_i}\) 完全对应。
+
+在固定源下，\textbf{归一化的}期望值定义为
+\begin{equation}\label{eq:expectation}
+ \avg{X}_J=\frac{1}{\ZZ[J]}\int\mathcal D\phi\,X[\phi]\,
+ e^{-S_E[\phi]+\int J\OO}.
+\end{equation}
+对式 \eqref{eq:definitions} 求导，分母 \(\ZZ[0]\) 是常数，于是
+\begin{align}
+ \frac{\delta Z[J]}{\delta J(x)}
+ &=\frac{1}{\ZZ[0]}\int\mathcal D\phi\,\OO(x)e^{-S_E+\int J\OO}\notag\\
+ &=\frac{\ZZ[J]}{\ZZ[0]}\avg{\OO(x)}_J
+ = Z[J]\avg{\OO(x)}_J.\label{eq:firstZ}
+\end{align}
+\textbf{“插入”}就是在对所有场构型求和时，多乘上一个 \(\OO(x)\)。它不是在积分结束后再向某条经典轨迹加一个粒子。插入哪个算符，由源耦合的是哪个算符决定。
+
+重复求导得到
+\begin{equation}\label{eq:nZ}
+ \frac{1}{Z[J]}\frac{\delta^n Z[J]}{\delta J(x_1)\cdots\delta J(x_n)}
+ =\avg{\OO(x_1)\cdots\OO(x_n)}_J.
+\end{equation}
+在 \(J=0\) 时，由 \(Z[0]=1\) 可以省去左侧的 \(1/Z\)。在非零源下则不能随手省略。这些是欧氏关联函数；在量子理论的算符表述中，对应适当的欧氏时间排序。
+
+\physicsnote{先保留任意 \(J\)，是为了拥有一组可独立微分的探针；求导后再置 \(J=0\)，读到的就是原理论的关联。若一开始把 \(J\) 丢掉，只剩一个数 \(Z[0]\)，就失去了这些导数信息。}
+
+\step{把“生成”看得更具体}
+形式上，在零源附近展开
+\begin{equation}
+ Z[J]=1+\intx J(x)\avg{\OO(x)}_0
+ +\frac12\int\dd^d x\dd^d y\,J(x)J(y)\avg{\OO(x)\OO(y)}_0+\cdots.
+\end{equation}
+关联函数是这个泛函展开的系数。连续场论中这些系数通常是分布；重合点需要正规化与重整化，不能把所有位置都当作可直接代入的普通函数值。
+
+\newpage
+\section{为什么取对数？连通项从哪里来？}
+\question{为什么系统的平均值变化，与“减去平均值乘积”的两点函数有关？}
+由式 \eqref{eq:firstZ}，
+\begin{equation}
+ \frac{\delta W}{\delta J(x)}=\frac{1}{Z}\frac{\delta Z}{\delta J(x)}
+ =\avg{\OO(x)}_J.
+\end{equation}
+再求一次导数，关键是\textbf{归一化因子本身也依赖源}。设
+\(N_x[J]=\int\mathcal D\phi\,\OO(x)e^{-S_E+\int J\OO}\)，则
+\begin{align}
+ \frac{\delta\avg{\OO(x)}_J}{\delta J(y)}
+ &=\frac{1}{\ZZ}\frac{\delta N_x}{\delta J(y)}
+   -\frac{N_x}{\ZZ^2}\frac{\delta\ZZ}{\delta J(y)}\notag\\
+ &=\avg{\OO(x)\OO(y)}_J
+   -\avg{\OO(x)}_J\avg{\OO(y)}_J\notag\\
+ &\equiv G_{c,J}(x,y)
+ =\frac{\delta^2 W}{\delta J(x)\delta J(y)}.\label{eq:covariance}
+\end{align}
+第二项直接来自归一化分母的求导；在正权重情形，可以理解为“改变权重后，总概率仍须归一化”。记
+\(\Delta\OO(x)=\OO(x)-\avg{\OO(x)}_J\)，便有
+\(G_{c,J}(x,y)=\avg{\Delta\OO(x)\Delta\OO(y)}_J\)。
+
+\physicsnote{若两个位置的涨落同向出现，协方差通常为正；反向出现则可为负。单纯的 \(\avg{\OO(x)}\avg{\OO(y)}\) 只记录各自的背景均值，不描述共同涨落。因此二阶导数保留的是连通两点函数。零协方差一般不等于统计独立，不能把“没有两点关联”当作“没有任何关联”。}
+
+\step{更高阶：对数把独立块拆开}
+\(W\) 的各阶源导数是连通关联函数，也称累积量（cumulants）。直观上，若两个真正独立的子系统有
+\(Z_{A+B}=Z_AZ_B\)，则 \(W_{A+B}=W_A+W_B\)；跨越两个子系统的混合导数自动为零。一般的组合关系则由 \(Z=e^W\) 重建所有连通块的乘积。
+
+例如，\textbf{零源、零均值的高斯场}有
+\begin{equation}
+ \avg{\phi_1\phi_2\phi_3\phi_4}_0
+ =G_{12}G_{34}+G_{13}G_{24}+G_{14}G_{23},\qquad
+ \avg{\phi_1\phi_2\phi_3\phi_4}_{c,0}=0.
+\end{equation}
+其中 \(G_{ij}=\avg{\phi(x_i)\phi(x_j)}_0\)。完整四点函数可以非零，只是没有独立于两点函数的新四点连通信息。非零均值时，完整四点函数还含均值贡献，不能照抄这个三项式。
+
+\newpage
+\section{算到底：一个高斯变量的均值、涨落与响应}
+\question{上述公式是否真的描述“外场推移平均值”的过程？}
+先暂时不考虑时空，只计算普通积分。令 \(a>0\)，
+\begin{equation}
+ \ZZ(J)=\int_{-\infty}^{\infty}\dd q\,e^{-a q^2/2+Jq}.
+\end{equation}
+\(a\) 控制偏离原点的代价；源 \(J\) 给分布一个倾向。完成平方：
+\begin{equation}
+ -\frac a2q^2+Jq=-\frac a2\left(q-\frac Ja\right)^2+\frac{J^2}{2a}.
+\end{equation}
+将积分变量平移为 \(\eta=q-J/a\)，积分的宽度没有改变，得到
+\begin{equation}
+ \ZZ(J)=\sqrt{\frac{2\pi}{a}}\,e^{J^2/(2a)},\qquad
+ Z(J)=e^{J^2/(2a)},\qquad W(J)=\frac{J^2}{2a}.
+\end{equation}
+于是均值、完整二阶矩和方差分别为
+\begin{align}
+ \bar q=\avg q_J&=W'(J)=\frac Ja,\notag\\
+ \avg{q^2}_J&=\frac{Z''(J)}{Z(J)}=\frac1a+\frac{J^2}{a^2},\notag\\
+ \avg{(q-\bar q)^2}_J&=W''(J)=\frac1a
+ =\frac{\dd\bar q}{\dd J}.\label{eq:gaussianResponse}
+\end{align}
+这里的微分是\textbf{比较两个不同源下的分布}，没有涉及系统随时间怎样运动。只有均值被平移，围绕均值的涨落宽度保持不变，这是线性源耦合的高斯模型的特殊性质；相互作用理论的方差一般会随 \(J\) 改变。
+
+\physicsnote{更大的 \(a\) 让分布更窄，也让同样的源更难推动均值，所以涨落与响应同时减小。\(J=0\) 时均值为零，方差却为 \(1/a\)：平均值为零绝不是每个构型都等于零。高斯理论也有真实的涨落。}
+
+\step{为什么刚才的等式像“涨落决定响应”？}
+在这个静态模型里，较大的自然涨落意味着权重更容易被小源偏置。若把指数改写为
+\(-\beta kq^2/2+\beta f q\)，则 \(a=\beta k\)、\(J=\beta f\)。对\textbf{物理外力}求导得到
+\begin{equation}
+ \frac{\dd\bar q}{\dd f}=\beta\,\mathrm{Var}(q)=\frac1k.
+\end{equation}
+这说明温度因子是否出现，取决于源的定义；不能把对 \(J\) 与对 \(f\) 的导数混为一谈。此例也解释了为什么使用欧氏约定时，要先明确哪些因子已吸收到源里。
+
+\newpage
+\section{推广到场：为什么两点函数是算符的逆？}
+\question{高斯积分的 \(1/a\)，在场论中变成了什么？}
+考虑线性源耦合到实标量场 \(\OO=\phi\)，且
+\begin{equation}
+ S_E[\phi]=\frac12\intx\phi(x)A\phi(x),\qquad A=-\partial_E^2+m^2.
+\end{equation}
+这一写法已做分部积分；这里取合适的齐次边界条件或周期条件，使边界项消失。先在有限体积、有 UV 正规化的情形推导，要求 \(A\) 对称、正定、可逆。无质量理论的零模需另外处理，不能直接写成 \(A^{-1}\)。
+
+定义 Green 核 \(G\) 为
+\begin{equation}
+ A_xG(x,y)=\delta^{(d)}(x-y),\qquad
+ (GJ)(x)=\int\dd^d y\,G(x,y)J(y).
+\end{equation}
+\(A_x\) 作用在第一个位置上。指定微分表达式还不够，\textbf{求逆时必须指定边界条件}。不同的边界或状态问题，可能选择不同的 Green 函数。
+
+用 \(\phi=\eta+GJ\) 完成泛函版本的平方：
+\begin{equation}
+ -\tfrac12\phi A\phi+J\phi
+ =-\tfrac12\eta A\eta+\tfrac12 JGJ,\qquad
+ JGJ\equiv\int\dd^d x\dd^d y\,J(x)G(x,y)J(y).
+\end{equation}
+其中 \(\phi A\phi\) 和 \(J\phi\) 都包含积分。平移后关于 \(\eta\) 的高斯积分与零源相同，故其行列式因子在 \(\ZZ[J]/\ZZ[0]\) 中抵消，得到
+\begin{equation}\label{eq:freeZ}
+ Z[J]=e^{\frac12JGJ},\quad W[J]=\frac12JGJ,\quad
+ \bar\phi(x)=\frac{\delta W}{\delta J(x)}=(GJ)(x),\quad G_{c,J}(x,y)=G(x,y).
+\end{equation}
+平均场因此满足 \(A\bar\phi=J\)。这和普通高斯变量的 \(a\bar q=J\) 是同一件事，只是数 \(a\) 换成了微分算符，逆数换成了积分核。
+
+\physicsnote{\(G\) 有两种相容的读法：它衡量不同位置共同涨落的程度，也把一个源分布映射成平均场的变化。自由场中两种读法由同一个核实现。\(W\) 只有二次项，表示三阶及更高连通关联为零，绝不表示“两点关联也消失”。}
+连续极限下，\(G(x,y)\) 可能在 \(x=y\) 奇异。上述式子应按分布理解，或先与平滑源积分；这里不把重合点发散当成一个有限的普通数。传播子的傅里叶表达与具体边界问题可在后续单元展开。
+
+\newpage
+\section{“响应”是哪一种响应？}
+\question{既然 \(\delta\avg{\OO}/\delta J=G_c\)，是否已经算出了信号随时间传播？}
+由式 \eqref{eq:covariance}，在小的欧氏源变化下，
+\begin{equation}\label{eq:linear}
+ \delta\avg{\OO(x)}_J
+ =\int\dd^d y\,G_{c,J}(x,y)\,\delta J(y)+O(\delta J^2).
+\end{equation}
+这首先是在比较\textbf{不同欧氏权重下的期望值}。它告诉我们改变某处的权重，其他位置的平均值怎样变化；并不自动指定“先施加扰动、后观察结果”的因果实验。
+
+\step{静态平衡：积分后的涨落控制易感率}
+在有限温度下，欧氏时间为 \(0\leq\tau<\beta\)。令源不依赖欧氏时间，\(J(\tau,\mathbf y)=h\,j(\mathbf y)\)，则在零源处
+\begin{equation}
+ \left.\frac{\partial\avg{\OO(0,\mathbf x)}_h}{\partial h}\right|_{h=0}
+ =\int_0^\beta\dd\tau\int\dd^{d-1}\mathbf y\,
+ G_{c,0}((0,\mathbf x),(\tau,\mathbf y))\,j(\mathbf y).
+\end{equation}
+这才是某个指定外场形状对应的静态响应。对于量子系统，一般要保留欧氏时间积分；只有适当的对易条件或经典极限下，才能把它简化为 \(\beta\) 乘等时协方差；测量与外场共轭的同一个总观测量时，才成为方差。第 4 节的单变量模型正是最简单的静态例子。
+
+\step{实时间：需要额外指定因果性}
+若实验中扰动为
+\(H'(t)=-\int\dd^{d-1}\mathbf y\,j(t,\mathbf y)\OO(t,\mathbf y)\)，对未扰动态取期望，可定义线性响应核
+\begin{align}
+ \delta\avg{\OO(t,\mathbf x)}
+ &=\int\dd t'\dd^{d-1}\mathbf y\,
+ \chi_R(t,\mathbf x;t',\mathbf y)\,j(t',\mathbf y),\notag\\
+ \chi_R(t,\mathbf x;t',\mathbf y)
+ &=i\,\theta(t-t')\avg{[\OO(t,\mathbf x),\OO(t',\mathbf y)]}_0.
+\end{align}
+这里的 \(+i\) 与上述 \(H'=-j\OO\) 及响应公式一起定义符号；也有文献把 \(-i\theta\avg{[\OO,\OO]}\) 定义为 \(G_R\)，此时本式的 \(\chi_R=-G_R\)。阶跃函数保证未来的源不会影响过去的读数。
+
+\physicsnote{欧氏两点函数与实时间响应有联系，但要通过适当的解析延拓或实时间路径积分，并选择 retarded 条件。不能只把 \(\tau\) 改名为 \(t\)，也不能把欧氏 Green 核直接当作因果传播核。全息中选取内部正则解或入射解，正是这类额外物理信息的一部分。}
+
+\newpage
+\section{接到全息：边界条件为什么能生成关联函数？}
+\question{为什么计算一个 bulk 在壳作用量，就能读出边界的均值和两点函数？}
+先固定字典的约定：边界 QFT 采用式 \eqref{eq:definitions} 的 \(+\int J\OO\)；bulk 的渐近源数据识别为 \(\phi_{(0)}=J\)。欧氏字典示意为
+\begin{equation}
+ \ZZ_{\mathrm{QFT}}[J]
+ =\ZZ_{\mathrm{bulk}}[\phi_{(0)}=J]
+ \simeq e^{-I_{\mathrm{ren}}[\phi_{\mathrm{cl}}[J]]}.
+\end{equation}
+右侧近似要求适当的半经典极限，并假定当前由一个主要鞍点控制。\(\phi_{\mathrm{cl}}[J]\) 满足 bulk 方程、给定的渐近源以及内部条件；\(I_{\mathrm{ren}}\) 是加入边界项与反项后的重整化在壳作用量。
+
+把右侧简记为 \(e^{-I_{\mathrm{ren}}[J]}\)，并采用本篇的零源归一化，便有
+\begin{equation}\label{eq:holo}
+ W[J]\simeq-I_{\mathrm{ren}}[J]+I_{\mathrm{ren}}[0],\qquad
+ \avg{\OO(x)}_J\simeq-\frac{\delta I_{\mathrm{ren}}}{\delta J(x)},\qquad
+ G_{c,J}(x,y)\simeq-\frac{\delta^2 I_{\mathrm{ren}}}{\delta J(x)\delta J(y)}.
+\end{equation}
+这里的负号由本页约定推出；比较文献时还要核对源的符号、Euclidean/Lorentzian 形式，以及径向法向和动量的定义，不能把负号当成独立于约定的字典。
+
+\step{在壳以后为什么仍有非零变分？}
+一般变分包含“运动方程乘 \(\delta\phi\)”与边界项。在壳只令前者为零；改变 \(J\) 时，边界数据也改变，边界项仍在。用与本页一致的定义写
+\begin{equation}
+ \delta I_{\mathrm{ren}}=\int\dd^d x\,\Pi_{\mathrm{ren}}(x)\,\delta J(x),
+ \qquad \avg{\OO(x)}_J\simeq-\Pi_{\mathrm{ren}}(x).
+\end{equation}
+于是实际计算是：改变边界源，重新求满足内部条件的解，再观察其重整化边界动量怎样改变。通常渐近展开的一个系数指定源，另一个系数携带响应；两者之间的关系由 bulk 方程与内部条件共同决定。
+
+\physicsnote{bulk 在半经典近似下使用经典解，并不表示边界 QFT 没有量子涨落：边界的连通二点函数已包含在 \(I_{\mathrm{ren}}[J]\) 对源的二阶依赖中。经典 bulk 与自由边界场也不是同义词；bulk 相互作用可以产生更高的边界连通关联。}
+局部有限反项可以改变接触项，例如增加 \(\int J^2\) 会改变与 \(\delta(x-y)\) 成比例的二点项。因此裸的发散在壳作用量不能直接使用；讨论非重合点信息与重合点接触项时也须区分。
+
+\newpage
+\section{选读：能否用平均场代替源作为自变量？}
+\question{\(W[J]\) 与有效作用量 \(\Gamma[\bar\phi]\) 分别回答什么问题？}
+本节取源线性耦合到基本场 \(\phi\)。定义
+\begin{equation}
+ \bar\phi(x)=\frac{\delta W}{\delta J(x)},\qquad
+ \Gamma[\bar\phi]=\intx J(x)\bar\phi(x)-W[J].
+\end{equation}
+假定在讨论的源附近可以把 \(\bar\phi[J]\) 局部反解为 \(J[\bar\phi]\)，右侧的 \(J\) 随之被消去。这个 Legendre 变换把“给定源，平均场是多少”改写成“要维持这个平均场，需要多大的源”。
+
+现在直接变分：
+\begin{align}
+ \delta\Gamma
+ &=\intx\bigl(\delta J\,\bar\phi+J\,\delta\bar\phi\bigr)
+   -\intx\frac{\delta W}{\delta J}\delta J\notag\\
+ &=\intx J\,\delta\bar\phi,
+ \qquad \frac{\delta\Gamma}{\delta\bar\phi(x)}=J(x).
+\end{align}
+因此没有外源时，物理平均场满足 \(\delta\Gamma/\delta\bar\phi=0\)。这看起来像经典运动方程，但 \(\Gamma\) 一般已包含量子效应，不能直接用裸的 \(S_E\) 替代。
+
+再用链式法则，对反函数关系求导：
+\begin{equation}
+ \int\dd^d z\,
+ \frac{\delta^2\Gamma}{\delta\bar\phi(x)\delta\bar\phi(z)}
+ \frac{\delta^2W}{\delta J(z)\delta J(y)}
+ =\delta^{(d)}(x-y).
+\end{equation}
+在可逆的子空间上，这就是 \(\Gamma^{(2)}=G_c^{-1}\)。若有零模、规范冗余或不可反解之处，不能不加处理就写这个逆。
+
+\physicsnote{\(W^{(2)}\) 描述平均场对源的灵敏度；\(\Gamma^{(2)}\) 描述把平均场推离原位置所需的“刚度”。第 4 节中二者分别为 \(1/a\) 与 \(a\)。更软的方向通常意味着更大的涨落与响应。}
+自由场例子里 \(\bar\phi=GJ\)、\(J=A\bar\phi\)，所以
+\begin{equation}
+ \Gamma[\bar\phi]=\frac12\bar\phi A\bar\phi.
+\end{equation}
+这里恰好得到经典二次作用量；它是高斯模型的结果，不是相互作用理论的普遍恒等式。\(\Gamma\) 也称 1PI（one-particle-irreducible，一粒子不可约）有效作用量，其导数生成 1PI 顶角。全息中首先得到的是 \(W\simeq-I_{\mathrm{ren}}+\text{常数}\)，若要 \(\Gamma\)，还须按所选变量做相应的 Legendre 变换。
+
+\newpage
+\section{主动检验：用计算检查物理理解}
+建议先遮住下面的核对线索，用 10--15 分钟完成前两题。第三题用于检验与全息的连接。
+
+\textbf{1．均值不为零，如何分离背景与涨落？}
+令 \(S(q)=a(q-b)^2/2\)、\(a>0\)，源仍为 \(+Jq\)，并仍用零源归一化。求 \(Z(J)\)、\(W(J)\)、\(\avg q_J\)、\(\avg{q^2}_J\)。判断：改变 \(b\) 后，零源的完整二点与连通二点是否相同？为什么？
+
+\textbf{2．两个变量怎样互相响应？}
+考虑
+\begin{equation}
+ S(q_1,q_2)=\frac a2(q_1^2+q_2^2)+c q_1q_2,
+ \qquad a>|c|,
+\end{equation}
+源为 \(J_1q_1+J_2q_2\)。不必逐个积分，利用二次型求
+\(\partial\avg{q_1}/\partial J_2\)。当 \(c>0\) 时为什么是负的？当 \(c\to a^-\) 时，哪一个组合变软，响应为何增大？
+
+\textbf{3．只知道边界源，为什么还不够？}
+用自己的话解释：求全息响应时，为什么除了边界源还要给内部条件？若把欧氏计算得到的二点核直接叫作实时间因果响应，缺少了什么？
+
+\medskip\hrule\medskip
+\textbf{核对线索}
+\begin{enumerate}
+\item 平移 \(q=b+\eta\)：\(Z=e^{bJ+J^2/(2a)}\)、\(W=bJ+J^2/(2a)\)。均值为 \(b+J/a\)，完整二点为 \((b+J/a)^2+1/a\)，连通二点为 \(1/a\)。背景均值与涨落宽度是不同信息。
+\item 矩阵 \(A=\left(\begin{smallmatrix}a&c\\c&a\end{smallmatrix}\right)\)，故交叉响应为
+\(-c/(a^2-c^2)\)。\(c>0\) 惩罚同号构型；\(c\to a^-\) 时反向组合 \(q_1-q_2\) 的刚度 \(a-c\) 趋零。端点处不再正定，本高斯积分失效。
+\item 边界源只指定问题的一部分；内部条件选择相应的解与物理状态。实时间还要指定因果处方，例如 retarded 条件，不能只改时间符号。
+\end{enumerate}
+
+\textbf{本单元完成标准。}能够不看材料推导 \(W\) 的前两阶导数，解释归一化为何产生减项；能算完高斯例子并预测均值、涨落与响应怎样变化；能说明全息中“源作为边界数据、在壳边界变分读取响应”的逻辑。第 8 节不作为本次必须掌握的门槛。
+
+\textbf{延伸阅读与约定对照}
+\begin{itemize}
+\item D. Tong, \textit{Statistical Field Theory}, \href{https://davidtong.org/teaching/statistical-field-theory/sfthtml/S2}{第 2 章，\S2.2--2.2.2}：源、连通关联与 Green 函数。其统计物理记号含 \(\beta\)，与本文比较时先换算源。
+\item D. Skinner, \textit{Advanced Quantum Field Theory}, \href{https://www.damtp.cam.ac.uk/user/dbs26/AQFT/chap2.pdf}{第 2 章}：零维场论的高斯例子及进一步展开。
+\item J. McGreevy, \textit{Holographic duality with a view toward many-body physics}, \href{https://arxiv.org/abs/0909.0518}{arXiv:0909.0518，第 4 节}：全息生成泛函与源、响应；特别参看 \S4.4。比较公式前请核对各自符号约定。
+\end{itemize}
+\end{document}
