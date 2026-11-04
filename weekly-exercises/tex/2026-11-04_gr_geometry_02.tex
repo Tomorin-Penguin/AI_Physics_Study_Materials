@@ -3,7 +3,7 @@
 \usepackage{fontspec,amsmath,amssymb,xcolor}
 \usepackage[margin=24mm]{geometry}
 \usepackage[unicode,hidelinks,pdftitle={引力几何练习 02：楔积与外微分}]{hyperref}
-\setmainfont[BoldFont={Noto Sans CJK SC},BoldFeatures={FakeBold=2}]{Noto Sans CJK SC}
+\setmainfont[BoldFont={Noto Sans CJK SC},BoldFeatures={FakeBold=2},ItalicFont={Noto Sans CJK SC},ItalicFeatures={FakeSlant=0.2}]{Noto Sans CJK SC}
 \XeTeXlinebreaklocale "zh"
 \XeTeXlinebreakskip=0pt plus 1pt
 \setlength{\parindent}{0pt}\setlength{\parskip}{5pt}\linespread{1.15}
@@ -13,32 +13,146 @@
 \begin{document}
 {\large 引力研究微分几何短练习\hfill 2026 年 11 月 4 日}
 \head{02\quad 楔积与外微分}
-\textbf{目标}\quad 给定一形式，用两套余标架计算同一个二形式，并辨认引力背景中观者测得的场强分量。前置知识为偏导数、方向导数及对偶基底。建议回顾 10--15 分钟，独立解题 30--45 分钟，再对照解答。
+\textbf{目标}\quad 给定一形式，用坐标余标架和一般余标架分别计算其外微分，并将场强的坐标分量转为局域观者的测量值。前置知识为偏导数、方向导数及基础度规知识；对偶基底在下文回顾。建议回顾约 15--20 分钟，独立解题约 30--45 分钟，再对照解答，总投入约 60--90 分钟。
+\par\textbf{修订说明}\quad 本版补充知识回顾中的定义、推导与例子，润色题解及物理说明；保留三道习题的内容和顺序。
 
 \head{知识回顾}
-\textbf{1\quad 形式测量什么？}\quad 在光滑流形 $M$ 的一点 $p$，一形式是线性映射 $T_pM\to\mathbb R$。二形式吃进两个切向量，分别线性，交换输入就变号。一般的 $k$ 形式在每点给出一个交替的 $k$ 重线性函数，光滑的这类场组成 $\Omega^k(M)$。函数看作零形式。下文所有场均光滑。
+下面依次回顾形式的取值、楔积、外微分及余标架。以下对象均光滑；同一个式子中配对的形式和向量均取在同一点。
 
-\textbf{2\quad 怎样组成有向面积？}\quad 两个一形式 $a,b$ 的楔积由
+\textbf{1\quad 一形式、二形式与坐标配对}
+
+在流形 $M$ 的一点 $p$，切向量 $V\in T_pM$ 可以对函数求方向导数，记作 $V[f]$。一形式 $\alpha_p$ 则以切向量为输入，线性地输出一个实数：$\alpha_p:T_pM\to\mathbb R$。这里的“测量”首先指这种线性读数，并不自动对应某个物理观测量。
+
+在 $n$ 维流形的局部坐标 $x^i$ 下（$i=1,\ldots,n$），记 $\partial_i:=\partial/\partial x^i$。切空间基底 $\partial_i$ 与余切空间基底 $\D x^i$ 的对偶配对为
+\[
+ \D x^i(\partial_j)=\delta^i{}_j.
+\]
+这里 $\delta^i{}_j$ 在 $i=j$ 时为 1，否则为 0。因此，若 $V=\sum_i V^i\partial_i$、$\alpha=\sum_i\alpha_i\D x^i$，则
+\[
+ \alpha(V)=\sum_i\alpha_i V^i.
+\]
+例如 $\alpha=2\D x-\D y$、$V=3\partial_x+4\partial_y$ 时，$\alpha(V)=2\times3-4=2$。形式的系数与向量的分量依赖基底，配对的结果不依赖基底。
+
+二形式 $F$ 以两个切向量为输入，对每个输入分别线性，且交换两输入时变号。因而 $F(U,V)=-F(V,U)$，$F(U,U)$ 恒为零。一般的点上 $k$ 形式是交替的 $k$ 重线性函数。在每一点光滑地指定这样的函数，就得到流形上的微分形式；所有光滑 $k$ 形式组成向量空间 $\Omega^k(M)$。函数称为零形式。
+
+\textbf{2\quad 楔积与有向面积}
+
+两个一形式 $a,b$ 的楔积定义为
 \[
  (a\wedge b)(U,V)=a(U)b(V)-a(V)b(U)
+ =\det\begin{pmatrix}a(U)&a(V)\\ b(U)&b(V)\end{pmatrix}.
 \]
-定义。它测量两个输入在 $a,b$ 所读出的分量中张成的有向面积。交换 $a,b$ 变号，故 $a\wedge a=0$。一般地，次数为 $k,l$ 的形式交换顺序给出 $(-1)^{kl}$。楔积只需要线性配对，不需要选度规。
+它给出两个平面向量 $(a(U),b(U))$ 与 $(a(V),b(V))$ 张成的有向面积。这是由 $a,b$ 指定的两个线性读数所确定的面积，一般不等于度规给出的物理面积。整个定义不需要度规。
 
-\textbf{3\quad 怎样求导？}\quad 外微分 $\D:\Omega^k(M)\to\Omega^{k+1}(M)$ 提取变化中的交替部分。对函数 $f$，$\D f(U)=U[f]$；局部坐标 $x^i$ 下 $\D f=\sum_i(\partial_i f)\D x^i$。计算遵循
-\[
- \D(\alpha\wedge\beta)=\D\alpha\wedge\beta+(-1)^k\alpha\wedge\D\beta,
- \qquad \D^2=0,\qquad k=\deg\alpha .
-\]
-乘函数相当于与零形式做楔积。比如在 $(x,y)$ 平面，
-\[
- \D(x^2\D y)=\D(x^2)\wedge\D y+x^2\D^2y=2x\,\D x\wedge\D y .
-\]
-在 $(\partial_x,\partial_y)$ 上取值为 $2x$，交换输入则为 $-2x$。
+例如，$(\D x\wedge\D y)(\partial_x,\partial_y)=1$，交换两个输入则为 $-1$。交换两个一形式也变号：$a\wedge b=-b\wedge a$，故 $a\wedge a=0$。更一般地，$k$ 形式 $\alpha$ 和 $l$ 形式 $\beta$ 满足 $\alpha\wedge\beta=(-1)^{kl}\beta\wedge\alpha$。
 
-\textbf{4\quad 哪些基底也要微分？}\quad 余标架是一组逐点线性独立、张成余切空间的一形式 $e^a$。其对偶向量 $E_b$ 满足 $e^a(E_b)=\delta^a{}_b$。坐标余标架满足 $\D(\D x^i)=0$。一般的 $e^a$ 可以含有位置依赖的系数，直接令 $\D e^a=0$ 会漏项。上标 $a$ 是基底标签，$e^0$ 本身仍是一形式。
+\newpage
+二形式的坐标展开有两种等价写法：
+\[
+ F=\sum_{i<j}F_{ij}\,\D x^i\wedge\D x^j
+   =\frac12\sum_{i,j}F_{ij}\,\D x^i\wedge\D x^j,
+ \qquad F_{ij}=F(\partial_i,\partial_j).
+\]
+$1/2$ 只用于对全部有序指标对求和、从而消除重复计数。在二维写 $F=f\,\D x\wedge\D y$ 时，直接有 $F(\partial_x,\partial_y)=f$，不应额外乘 $1/2$。
+
+\textbf{3\quad 外微分的计算规则与来源}
+
+外微分 $\D:\Omega^k(M)\to\Omega^{k+1}(M)$ 把 $k$ 形式变为 $(k+1)$ 形式。对零形式即函数 $f$，它就是熟悉的全微分：
+\[
+ \D f=\sum_i(\partial_i f)\D x^i,
+ \qquad (\D f)(V)=V[f].
+\]
+对一般形式，外微分也从系数的空间变化出发，但通过楔积保留交替部分。下面的二维计算把这句话具体化。
+
+计算所需的两条规则是
+\[
+ \D(\alpha\wedge\beta)
+ =\D\alpha\wedge\beta+(-1)^k\alpha\wedge\D\beta,
+ \quad k=\deg\alpha,
+ \qquad \D^2=0.
+\]
+其中函数是零形式，因此 $\D(f\beta)=\D f\wedge\beta+f\D\beta$；函数前没有负号。对一形式做外微分得到二形式，再做一次则得到零。
+
+\textbf{二维公式的逐步推导。} 在坐标 $(x,y)$ 下，写 $\alpha=P\D x+Q\D y$。利用 $\D(\D x)=\D(\D y)=0$，先展开乘积：
+\[
+ \D\alpha=\D P\wedge\D x+\D Q\wedge\D y.
+\]
+再将两个函数的全微分代入，
+\[
+ \D\alpha=(\partial_xP\,\D x+\partial_yP\,\D y)\wedge\D x
+ +(\partial_xQ\,\D x+\partial_yQ\,\D y)\wedge\D y.
+\]
+含有 $\D x\wedge\D x$、$\D y\wedge\D y$ 的项为零；将剩下的 $\D y\wedge\D x$ 改写成 $-\D x\wedge\D y$，便得到
+\[
+ \boxed{\D(P\D x+Q\D y)=(\partial_xQ-\partial_yP)\,\D x\wedge\D y.}
+\]
+这里的负号来自楔积的反对称性。计算结束后，仍可在 $(\partial_x,\partial_y)$ 上取值核对系数。
+
+\textbf{完整例子。} 取 $\alpha=y^2\D x+3xy\D y$，则
+\[
+\begin{aligned}
+ \D\alpha
+ &=2y\,\D y\wedge\D x+3(y\D x+x\D y)\wedge\D y\\
+ &=(-2y+3y)\,\D x\wedge\D y
+ =y\,\D x\wedge\D y.
+\end{aligned}
+\]
+故 $(\D\alpha)(\partial_x,\partial_y)=y$。用二维公式复算：$\partial_x(3xy)-\partial_y(y^2)=3y-2y=y$。
+
+\textbf{$\D^2=0$ 的含义。} 对函数 $f$，上式给出
+\[
+ \D(\D f)=(\partial_x\partial_yf-\partial_y\partial_xf)\,
+ \D x\wedge\D y=0.
+\]
+光滑函数的混合偏导可交换，而楔积反对称，两者使结果抵消；一般形式也满足 $\D^2=0$。若 $\D\alpha=0$，称 $\alpha$ 为\textbf{闭形式}；若 $\alpha=\D\beta$，称为\textbf{恰当形式}。恰当形式必闭；对正次数形式，闭形式在足够小的可缩坐标邻域内是恰当的，但在整个流形上未必如此。本次只需使用“若 $e=\D f$，则 $\D e=0$”这一必要条件。
+
+\newpage
+\textbf{4\quad 一般余标架的外微分与局域读数}
+
+\textbf{余标架与对偶标架。} 一组逐点线性独立、张成余切空间的一形式 $e^a$ 称为余标架。相应的向量基底 $E_b$ 由
+\[
+ e^a(E_b)=\delta^a{}_b
+\]
+确定，称为对偶标架。这里 $a,b$ 是基底标签，$e^0$ 仍是一形式；上标 $0$ 不是幂次。确定这组对偶基底只需要线性代数，不需要度规。
+
+若 $e^a=\sum_i B^a{}_i(x)\D x^i$，则可逆矩阵 $B$ 的逆给出 $E_a$ 在坐标基底中的分量。由于 $B^a{}_i$ 一般随位置变化，
+\[
+ \D e^a=\sum_i\D B^a{}_i\wedge\D x^i
+ =\sum_{i,j}(\partial_jB^a{}_i)\,\D x^j\wedge\D x^i.
+\]
+因此，$\D(\D x^i)=0$ 并不意味着 $\D e^a=0$。若 $\alpha=\sum_a\alpha_a e^a$，就必须同时微分系数和基底：
+\[
+ \boxed{\D\alpha=\sum_a\big(\D\alpha_a\wedge e^a+\alpha_a\D e^a\big).}
+\]
+如果某个 $e^a$ 的外微分在一点非零，它就不可能在包含该点的邻域内等于某个坐标函数的微分，因为那样会要求 $\D e^a=\D^2y^a=0$。判断这里是否为“坐标余标架”，问的是能否恰好写成 $e^a=\D y^a$，而不只是能否用坐标微分的线性组合表示。
+
+\textbf{对偶不等于升降指标。} 若引入 Lorentz 度规，并选择满足
+\[
+ g=-e^0\otimes e^0+e^1\otimes e^1
+\]
+的正交归一余标架，则其对偶向量满足 $g(E_0,E_0)=-1$、$g(E_1,E_1)=1$、$g(E_0,E_1)=0$。但 $E_0$ 通过度规得到的一形式是 $g(E_0,\cdot)=-e^0$；它与线性对偶配对中的 $e^0$ 差一个负号。两种“对偶”应分别使用定义核对。
+
+\textbf{引力中的局域读数。} 以一般的二维静态度规为例，
+\[
+ g=-N(x)^2\D t\otimes\D t+B(x)^2\D x\otimes\D x,
+ \qquad N>0,\ B>0.
+\]
+固定 $x$ 的观者满足 $\D\tau=N\D t$，沿空间方向的固有长度元为 $\D\ell=B\D x$。因此可以选取
+\[
+ e^0=N\D t,\quad e^1=B\D x,
+ \qquad E_0=N^{-1}\partial_t,\quad E_1=B^{-1}\partial_x.
+\]
+选好未来方向后，$E_0$ 是静止观者的单位时间方向，$E_1$ 是单位空间方向。若二形式写作 $F=f\,\D x\wedge\D t$，则其有符号局域读数为
+\[
+ F(E_1,E_0)=\frac{f}{BN}.
+\]
+两个换算因子分别来自两个输入。也可先用 $\D x=e^1/B$、$\D t=e^0/N$ 将 $F$ 改写为 $\frac{f}{BN}e^1\wedge e^0$，再用对偶配对得到同一结果。
+
+\textbf{开题自检}\quad 能否说清一个形式的次数、输入和输出，并用配对核对符号？计算 $\D(\alpha_a e^a)$ 时，是否已经写出系数项与基底项，再判断哪些项为零？
+
 \newpage
 \head{独立练习}
-三题均先指定输入或二形式的基底顺序，再读出系数。建议做完本页再翻页。
+计算二形式时，先固定楔积的基底顺序；求取值时，明确两个输入的顺序。建议做完本页再翻页。
 
 \subsection*{01\quad 楔积为零能说明什么？\hfill 8 分钟}
 固定 $p$，取实一形式 $a,b\in T_p^*M$，假设 $a\ne0$。证明 $a\wedge b=0$ 当且仅当存在实数 $c$ 使 $b=ca$。提示：选一个满足 $a(U)=1$ 的向量，再让另一输入 $V$ 任意。若撤去 $a\ne0$，哪一方向会失效？给出反例。
@@ -55,16 +169,16 @@
 \[
  g=-(e^0)^2+(e^1)^2,\qquad e^0=(L/z)\D t,\quad e^1=(L/z)\D z .
 \]
-平方表示张量积。给定试探规范势 $A=a(z)e^0$，$a$ 光滑。定义场强 $F=\D A$，取增大的 $t$ 为未来方向、增大的 $z$ 为空间正方向。求对偶标架 $E_0,E_1$，并用余标架法与坐标法各求一次有符号读数 $\mathcal E:=F(E_1,E_0)$。若 $a$ 为非零常数，读数是多少？反过来，哪些 $a(z)$ 给出零场强？本题只用外代数，不需求解场方程。
+平方表示张量积，即 $(e^a)^2=e^a\otimes e^a$。给定试探规范势 $A=a(z)e^0$，$a$ 光滑。定义场强 $F=\D A$，取增大的 $t$ 为未来方向、增大的 $z$ 为空间正方向。求对偶标架 $E_0,E_1$，并用余标架法与坐标法各求一次有符号读数 $\mathcal E:=F(E_1,E_0)$。若 $a$ 为非零常数，读数是多少？反过来，哪些 $a(z)$ 给出零场强？本题只涉及微分形式的外微分和基底配对，不需求解场方程。
 
 \newpage
 \head{详细解答}
-\subsection*{01\quad 用第二个输入读出比例系数}
+\subsection*{01\quad 固定一个归一化输入，确定比例系数}
 因为 $a\ne0$，有向量 $W$ 使 $a(W)\ne0$。取 $U=W/a(W)$，便有 $a(U)=1$。假设 $a\wedge b=0$。对任意 $V\in T_pM$，
 \[
  0=(a\wedge b)(U,V)=b(V)-a(V)b(U).
 \]
-因此两个线性函数 $b$ 和 $b(U)a$ 在每个输入上取值相同，取 $c=b(U)$ 即可。反向代入，$a\wedge(ca)=c(a\wedge a)=0$。若删去非零假设，在实直线上取 $a=0,b=\D x$，楔积为零但 $b$ 无法写成 $ca$。结论逐点成立，此处的 $c$ 是该点上的数。
+因此两个线性函数 $b$ 和 $b(U)a$ 在每个输入上取值相同，取 $c=b(U)$ 即可。反向代入，$a\wedge(ca)=c(a\wedge a)=0$。若删去非零假设，失效的是从楔积为零推出 $b=ca$ 的方向；反向仍成立。反例是在实直线的一点取 $a=0,b=(\D x)_p$，楔积为零，但任何 $ca$ 都是零一形式，不能等于 $b$。结论逐点成立，此处的 $c$ 是该点上的数。
 
 \subsection*{02\quad 把系数的变化与基底的变化分开}
 因 $\D^2u=\D^2v=0$，
@@ -89,9 +203,9 @@
 由 $e^1\wedge e^2=e^u\D u\wedge\D v$，两式逐点相同。$u=0$ 时两者都消失。但漏掉的 $u e^1\wedge e^2$ 在该处也恰好为零，只查这一点发现不了这个错误。取 $u=1$ 时，两法在坐标基底中的系数均为 $2e-1$，漏项则只得到 $e-1$。
 
 \newpage
-\head{引力应用与工具卡}
+\head{引力应用：局域观者的电场}
 \subsection*{03\quad 局域读数中的两个贡献}
-对偶条件给出 $E_0=(z/L)\partial_t,E_1=(z/L)\partial_z$。例如 $e^0(E_0)=(L/z)(z/L)=1$，交叉配对均为零。于是 $g(E_0,E_0)=-1$，$E_0$ 是固定 $z$ 的未来指向单位四速度（此处时空为二维），$E_1$ 是与其正交的单位空间方向。
+对偶条件给出 $E_0=(z/L)\partial_t,E_1=(z/L)\partial_z$。例如 $e^0(E_0)=(L/z)(z/L)=1$，交叉配对均为零。于是 $g(E_0,E_0)=-1$，$g(E_1,E_1)=1$，$g(E_0,E_1)=0$。固定 $z$ 的观者满足 $\D\tau=(L/z)\D t$，故其单位类时切向量为 $\D/\D\tau=(z/L)\partial_t=E_0$；$E_1$ 则是该观者的单位空间方向。这里采用单位光速，并按题目约定用 $F(E_1,E_0)$ 定义电场的有符号分量。
 
 余标架法中，以撇号表示对 $z$ 求导。因 $\D z=(z/L)e^1$，
 \[
@@ -106,14 +220,26 @@
  \qquad \boxed{\mathcal E=L\left(\frac{a'}z-\frac a{z^2}\right)
  \left(\frac zL\right)^2=\frac{za'-a}L.}
 \]
-两个 $z/L$ 分别来自测量者的单位空间方向和单位时间方向。交换它们会改变读数符号。若 $a=a_0$ 为常数，$\mathcal E=-a_0/L$：不同高度的静止钟以不同速率积累固有时，单位时间余标架 $e^0$ 随高度改变，故固定其前面的系数仍可产生电场。反之，$F=0$ 等价于 $(a/z)'=(za'-a)/z^2=0$，在连通区间上 $a=Cz$，其中 $C$ 为常数。此时 $A=LC\D t=\D(LCt)$，再取外微分确实为零。
+两个 $z/L$ 分别来自测量者的单位空间方向和单位时间方向。交换输入顺序会改变读数符号。若 $a=a_0$ 为常数，$\mathcal E=-a_0/L$。其直接原因是：$a$ 是规范势在位置依赖余标架 $e^0$ 上的系数，保持 $a$ 不变并不保持坐标系数 $A_t=La/z$ 不变。因此 $\D a=0$ 时，$a\D e^0$ 仍然可以非零。$a$ 本身依赖规范选择，不是规范不变的观测量；本题的局域读数由 $F$ 决定。
+
+反之，$F=0$ 等价于 $(a/z)'=(za'-a)/z^2=0$，在连通区间上 $a=Cz$，其中 $C$ 为常数。此时 $A=LC\D t=\D(LCt)$，再取外微分确实为零。这是在本题坐标片内的结论。
+
+\newpage
+\head{工具卡与后续联系}
 
 \textbf{可复用的工具卡}\par
 ① 读出二形式系数前先写输入顺序，用对偶配对核对正负号。\par
-② 计算 $\D(a e^i)$ 时分别写出 $\D a\wedge e^i$ 与 $a\D e^i$。只有确认基底闭合后才能删去第二项。\par
+② 计算 $\D(a e^i)$ 时分别写出 $\D a\wedge e^i$ 与 $a\D e^i$。只有确认 $\D e^i=0$ 后才能删去第二项。\par
 ③ 坐标分量转为局域读数时，把每个输入都换成单位向量，再检验是否与余标架算法一致。
 
-\textbf{参考}\quad John M. Lee, \textit{Introduction to Smooth Manifolds}, 2nd ed., Ch.~14, Differential Forms（外代数与外微分）。
+\textbf{条件与常见混淆}\quad 第 01 题的比例判据需要第一个一形式非零。$\D e^a\ne0$ 足以排除 $e^a$ 是某个局部坐标的微分；不要把任意余标架当作坐标余标架。检验一个特殊点不能替代逐点恒等式，第 02 题的 $u=0$ 就会掩盖漏项。余标架的选择影响分量，不改变二形式本身；将分量解释为观者读数时，还需要明确单位标架与输入顺序。
+
+\textbf{与后续单元的联系}\quad 本期用 $\D^2=0$ 检查计算，也看到 $\D x^i$ 与一般 $e^a$ 的差别。下一单元将讨论外微分与拉回的交换，并通过 Stokes 公式把区域内的外微分与边界上的积分联系起来。本期不要求预先掌握该定理。
+
+\textbf{参考}\quad David Tong, \textit{General Relativity}, Secs.~2.4--2.4.1（微分形式与外微分）；Sec.~3.4.2（正交标架，延伸阅读）。正文计算与符号已独立核对，参考资料用于补充说明。\\
+\url{https://www.davidtong.org/teaching/general-relativity/grhtml/S2}\\
+\url{https://www.davidtong.org/teaching/general-relativity/grhtml/S3}
 
 \textbf{系列记录}\quad 02；核心技能为在坐标与非坐标余标架上计算外微分。题目指纹：逐点比例判据、指数余标架、AdS$_2$ 静止观者电场。承接 01 的配对与面积形式；03 将把外微分与拉回、Stokes 公式及边界积分联系起来。完成与掌握状态待反馈。
 \end{document}
+
