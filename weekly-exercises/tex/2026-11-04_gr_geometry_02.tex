@@ -1,0 +1,119 @@
+% UTF-8; XeLaTeX with Noto Sans CJK SC installed.
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec,amsmath,amssymb,xcolor}
+\usepackage[margin=24mm]{geometry}
+\usepackage[unicode,hidelinks,pdftitle={引力几何练习 02：楔积与外微分}]{hyperref}
+\setmainfont[BoldFont={Noto Sans CJK SC},BoldFeatures={FakeBold=2}]{Noto Sans CJK SC}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip=0pt plus 1pt
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}\linespread{1.15}
+\newcommand{\D}{\mathrm d}
+\newcommand{\head}[1]{\section*{\color{teal}#1}}
+\pagestyle{myheadings}\markright{引力几何练习\quad /\quad 02}
+\begin{document}
+{\large 引力研究微分几何短练习\hfill 2026 年 11 月 4 日}
+\head{02\quad 楔积与外微分}
+\textbf{目标}\quad 给定一形式，用两套余标架计算同一个二形式，并辨认引力背景中观者测得的场强分量。前置知识为偏导数、方向导数及对偶基底。建议回顾 10--15 分钟，独立解题 30--45 分钟，再对照解答。
+
+\head{知识回顾}
+\textbf{1\quad 形式测量什么？}\quad 在光滑流形 $M$ 的一点 $p$，一形式是线性映射 $T_pM\to\mathbb R$。二形式吃进两个切向量，分别线性，交换输入就变号。一般的 $k$ 形式在每点给出一个交替的 $k$ 重线性函数，光滑的这类场组成 $\Omega^k(M)$。函数看作零形式。下文所有场均光滑。
+
+\textbf{2\quad 怎样组成有向面积？}\quad 两个一形式 $a,b$ 的楔积由
+\[
+ (a\wedge b)(U,V)=a(U)b(V)-a(V)b(U)
+\]
+定义。它测量两个输入在 $a,b$ 所读出的分量中张成的有向面积。交换 $a,b$ 变号，故 $a\wedge a=0$。一般地，次数为 $k,l$ 的形式交换顺序给出 $(-1)^{kl}$。楔积只需要线性配对，不需要选度规。
+
+\textbf{3\quad 怎样求导？}\quad 外微分 $\D:\Omega^k(M)\to\Omega^{k+1}(M)$ 提取变化中的交替部分。对函数 $f$，$\D f(U)=U[f]$；局部坐标 $x^i$ 下 $\D f=\sum_i(\partial_i f)\D x^i$。计算遵循
+\[
+ \D(\alpha\wedge\beta)=\D\alpha\wedge\beta+(-1)^k\alpha\wedge\D\beta,
+ \qquad \D^2=0,\qquad k=\deg\alpha .
+\]
+乘函数相当于与零形式做楔积。比如在 $(x,y)$ 平面，
+\[
+ \D(x^2\D y)=\D(x^2)\wedge\D y+x^2\D^2y=2x\,\D x\wedge\D y .
+\]
+在 $(\partial_x,\partial_y)$ 上取值为 $2x$，交换输入则为 $-2x$。
+
+\textbf{4\quad 哪些基底也要微分？}\quad 余标架是一组逐点线性独立、张成余切空间的一形式 $e^a$。其对偶向量 $E_b$ 满足 $e^a(E_b)=\delta^a{}_b$。坐标余标架满足 $\D(\D x^i)=0$。一般的 $e^a$ 可以含有位置依赖的系数，直接令 $\D e^a=0$ 会漏项。上标 $a$ 是基底标签，$e^0$ 本身仍是一形式。
+\newpage
+\head{独立练习}
+三题均先指定输入或二形式的基底顺序，再读出系数。建议做完本页再翻页。
+
+\subsection*{01\quad 楔积为零能说明什么？\hfill 8 分钟}
+固定 $p$，取实一形式 $a,b\in T_p^*M$，假设 $a\ne0$。证明 $a\wedge b=0$ 当且仅当存在实数 $c$ 使 $b=ca$。提示：选一个满足 $a(U)=1$ 的向量，再让另一输入 $V$ 任意。若撤去 $a\ne0$，哪一方向会失效？给出反例。
+
+\subsection*{02\quad 两条路线算一个外微分\hfill 12 分钟}
+在坐标为 $(u,v)$ 的实平面上，令 $e^1=\D u,\ e^2=e^u\D v$，取
+\[
+ \alpha=v e^1+u e^2 .
+\]
+求 $\D e^1,\D e^2$，据此判断这组余标架能否在某个开集上写成两个坐标函数的微分。先保留 $e^1,e^2$ 计算 $\D\alpha$，再将 $\alpha$ 展成坐标基底独立复算。在 $u=0$ 检查结果，并指出若在第一种算法中忽略 $\D e^2$ 会漏掉哪一项。
+
+\subsection*{03\quad AdS$_2$ 中静止观者测到的电场\hfill 15 分钟}
+在 Poincaré 坐标片 $z>0$，取曲率尺度 $L>0$、度规号差 $(-,+)$，令
+\[
+ g=-(e^0)^2+(e^1)^2,\qquad e^0=(L/z)\D t,\quad e^1=(L/z)\D z .
+\]
+平方表示张量积。给定试探规范势 $A=a(z)e^0$，$a$ 光滑。定义场强 $F=\D A$，取增大的 $t$ 为未来方向、增大的 $z$ 为空间正方向。求对偶标架 $E_0,E_1$，并用余标架法与坐标法各求一次有符号读数 $\mathcal E:=F(E_1,E_0)$。若 $a$ 为非零常数，读数是多少？反过来，哪些 $a(z)$ 给出零场强？本题只用外代数，不需求解场方程。
+
+\newpage
+\head{详细解答}
+\subsection*{01\quad 用第二个输入读出比例系数}
+因为 $a\ne0$，有向量 $W$ 使 $a(W)\ne0$。取 $U=W/a(W)$，便有 $a(U)=1$。假设 $a\wedge b=0$。对任意 $V\in T_pM$，
+\[
+ 0=(a\wedge b)(U,V)=b(V)-a(V)b(U).
+\]
+因此两个线性函数 $b$ 和 $b(U)a$ 在每个输入上取值相同，取 $c=b(U)$ 即可。反向代入，$a\wedge(ca)=c(a\wedge a)=0$。若删去非零假设，在实直线上取 $a=0,b=\D x$，楔积为零但 $b$ 无法写成 $ca$。结论逐点成立，此处的 $c$ 是该点上的数。
+
+\subsection*{02\quad 把系数的变化与基底的变化分开}
+因 $\D^2u=\D^2v=0$，
+\[
+ \D e^1=0,\qquad \D e^2=e^u\D u\wedge\D v=e^1\wedge e^2 .
+\]
+在每一点，右式在 $(\partial_u,\partial_v)$ 上的值为 $e^u>0$。若局部有 $e^2=\D y$，则该开集上 $\D e^2=\D^2y=0$，矛盾。
+
+在余标架中，用 $\D v=e^{-u}e^2$ 并保持 $e^1\wedge e^2$ 的顺序，
+\[
+\begin{aligned}
+ \D\alpha&=\D v\wedge e^1+v\D e^1+\D u\wedge e^2+u\D e^2\\
+ &=e^{-u}e^2\wedge e^1+e^1\wedge e^2+u e^1\wedge e^2\\
+ &=(1+u-e^{-u})e^1\wedge e^2 .
+\end{aligned}
+\]
+在坐标中，$\alpha=v\D u+ue^u\D v$。故
+\[
+ \D\alpha=\D v\wedge\D u+(1+u)e^u\D u\wedge\D v
+ =\big[(1+u)e^u-1\big]\D u\wedge\D v .
+\]
+由 $e^1\wedge e^2=e^u\D u\wedge\D v$，两式逐点相同。$u=0$ 时两者都消失。但漏掉的 $u e^1\wedge e^2$ 在该处也恰好为零，只查这一点发现不了这个错误。取 $u=1$ 时，两法在坐标基底中的系数均为 $2e-1$，漏项则只得到 $e-1$。
+
+\newpage
+\head{引力应用与工具卡}
+\subsection*{03\quad 局域读数中的两个贡献}
+对偶条件给出 $E_0=(z/L)\partial_t,E_1=(z/L)\partial_z$。例如 $e^0(E_0)=(L/z)(z/L)=1$，交叉配对均为零。于是 $g(E_0,E_0)=-1$，$E_0$ 是固定 $z$ 的未来指向单位四速度（此处时空为二维），$E_1$ 是与其正交的单位空间方向。
+
+余标架法中，以撇号表示对 $z$ 求导。因 $\D z=(z/L)e^1$，
+\[
+ \D e^0=-\frac L{z^2}\D z\wedge\D t=-\frac1L e^1\wedge e^0,
+ \qquad \D a=\frac zL a' e^1 .
+\]
+于是 $F=\D a\wedge e^0+a\D e^0=(za'-a)e^1\wedge e^0/L$。在有序对 $(E_1,E_0)$ 上，楔积的值为 $1\cdot1-0\cdot0=1$。
+
+坐标法中，$A=(La/z)\D t$，所以
+\[
+ F=L\left(\frac{a'}z-\frac a{z^2}\right)\D z\wedge\D t,
+ \qquad \boxed{\mathcal E=L\left(\frac{a'}z-\frac a{z^2}\right)
+ \left(\frac zL\right)^2=\frac{za'-a}L.}
+\]
+两个 $z/L$ 分别来自测量者的单位空间方向和单位时间方向。交换它们会改变读数符号。若 $a=a_0$ 为常数，$\mathcal E=-a_0/L$：不同高度的静止钟以不同速率积累固有时，单位时间余标架 $e^0$ 随高度改变，故固定其前面的系数仍可产生电场。反之，$F=0$ 等价于 $(a/z)'=(za'-a)/z^2=0$，在连通区间上 $a=Cz$，其中 $C$ 为常数。此时 $A=LC\D t=\D(LCt)$，再取外微分确实为零。
+
+\textbf{可复用的工具卡}\par
+① 读出二形式系数前先写输入顺序，用对偶配对核对正负号。\par
+② 计算 $\D(a e^i)$ 时分别写出 $\D a\wedge e^i$ 与 $a\D e^i$。只有确认基底闭合后才能删去第二项。\par
+③ 坐标分量转为局域读数时，把每个输入都换成单位向量，再检验是否与余标架算法一致。
+
+\textbf{参考}\quad John M. Lee, \textit{Introduction to Smooth Manifolds}, 2nd ed., Ch.~14, Differential Forms（外代数与外微分）。
+
+\textbf{系列记录}\quad 02；核心技能为在坐标与非坐标余标架上计算外微分。题目指纹：逐点比例判据、指数余标架、AdS$_2$ 静止观者电场。承接 01 的配对与面积形式；03 将把外微分与拉回、Stokes 公式及边界积分联系起来。完成与掌握状态待反馈。
+\end{document}
