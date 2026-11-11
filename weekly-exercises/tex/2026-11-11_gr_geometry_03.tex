@@ -1,0 +1,224 @@
+% UTF-8; XeLaTeX with Noto Sans CJK SC installed.
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec,amsmath,amssymb,xcolor}
+\usepackage[margin=24mm]{geometry}
+\usepackage[unicode,hidelinks,pdftitle={引力几何练习 03：拉回、Stokes 公式与边界积分}]{hyperref}
+\setmainfont[BoldFont={Noto Sans CJK SC},BoldFeatures={FakeBold=2},ItalicFont={Noto Sans CJK SC},ItalicFeatures={FakeSlant=0.2},SlantedFont={Noto Sans CJK SC},SlantedFeatures={FakeSlant=0.2}]{Noto Sans CJK SC}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip=0pt plus 1pt
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}\linespread{1.15}
+\newcommand{\D}{\mathrm d}
+\newcommand{\head}[1]{\section*{\color{teal}#1}}
+\pagestyle{myheadings}\markright{引力几何练习\quad /\quad 03}
+\begin{document}
+{\large 引力研究微分几何短练习\hfill 2026 年 11 月 11 日}
+\head{03\quad 拉回、Stokes 公式与边界积分}
+\textbf{学习目标}\quad 在参数空间中计算微分形式的积分，准确处理边界方向，并将局部连续性方程转化为区域的电荷收支。前置知识为链式法则、一形式与楔积、外微分的乘积规则。本期回顾约 15--20 分钟，独立练习约 35--40 分钟，含核对解答的总投入约 60--90 分钟。
+
+\head{知识回顾（一）\quad 把场限制到参数空间}
+设 $\Phi:M\to N$ 是光滑映射。$M$ 上坐标记作 $u^a$，$N$ 上坐标记作 $x^\mu$，映射分量为 $\Phi^\mu=x^\mu\circ\Phi$。拉回把 $N$ 上的形式变成 $M$ 上的形式，其作用方式是先把输入向量推前，再交给原形式。对 $p\in M$ 及 $U,V\in T_pM$，
+\[
+ (\Phi^*\alpha)_p(U)=\alpha_{\Phi(p)}(\D\Phi_p U),\qquad
+ (\Phi^*\omega)_p(U,V)=\omega_{\Phi(p)}(\D\Phi_pU,\D\Phi_pV).
+\]
+这里 $\alpha$ 是一形式，$\omega$ 是二形式，$\D\Phi_p$ 是映射的微分。对偶基底满足 $\D u^a(\partial_{u^b})=\delta^a{}_b$。由链式法则，推前向量的分量是 $U^a\partial_a\Phi^\mu$，因此
+\[
+ \Phi^*(\alpha_\mu\D x^\mu)
+ =\alpha_\mu(\Phi(u))\,\D(\Phi^\mu),\qquad
+ \D(\Phi^\mu)=(\partial_a\Phi^\mu)\D u^a .
+\]
+重复指标求和。系数必须在像点取值；$\D(\Phi^\mu)$ 是源空间上一个函数的微分。拉回还保持楔积，即 $\Phi^*(\alpha\wedge\beta)=\Phi^*\alpha\wedge\Phi^*\beta$，因为它将每个向量输入都送入同一个推前映射。以上定义无需度规，也无需 $\Phi$ 可逆。
+
+外微分 $\D$ 将 $k$ 形式变为 $k+1$ 形式。它满足 $\D(\eta\wedge\xi)=\D\eta\wedge\xi+(-1)^k\eta\wedge\D\xi$，其中 $\eta$ 为 $k$ 形式，且 $\D^2f=0$ 对每个光滑函数成立。后一性质来自混合偏导的对称性与楔积的反对称性。在局部坐标中，对一形式 $\alpha=\alpha_\mu\D x^\mu$，
+\[
+ \D\alpha=\D\alpha_\mu\wedge\D x^\mu
+ = (\partial_\nu\alpha_\mu)\D x^\nu\wedge\D x^\mu.
+\]
+第一步用了乘积规则以及 $\D(\D x^\mu)=\D^2x^\mu=0$。例如在二维，$\alpha=P\D x+Q\D y$ 给出
+\[
+ \D\alpha=(\partial_xQ-\partial_yP)\D x\wedge\D y.
+\]
+负号来自 $\D y\wedge\D x=-\D x\wedge\D y$。这里各项系数描述场在不同方向的变化，楔积固定其反对称组合。
+
+本期要证明的兼容关系是 $\D_M\Phi^*\alpha=\Phi^*\D_N\alpha$。下标标明在哪个空间求导，后文省略。它允许我们先在时空求导再限制到曲面，或先限制再求导。对函数，这由链式法则成立；对一般一形式，还需要使用楔积与 $\D^2=0$，这一步留给题 1。
+\newpage
+\head{知识回顾（二）\quad 从参数积分到边界积分}
+一形式的曲线积分由参数化定义。若 $\gamma:[a,b]\to N$ 是一条定向曲线，$x^\mu=x^\mu(s)$，则
+\[
+ \int_\gamma\alpha:=\int_a^b\gamma^*\alpha
+ =\int_a^b\alpha_\mu(x(s))\frac{\D x^\mu}{\D s}\,\D s .
+\]
+积分把沿曲线切向方向的取值累积起来。反转曲线方向会使结果变号。对二形式和有向曲面，同样先拉回二维参数域，再对 $\D u\wedge\D v$ 的系数做普通二重积分。若曲面嵌入为 $\Phi:D\to N$，定义 $\int_{\Phi(D)}\omega=\int_D\Phi^*\omega$，曲面的定向由参数域传递。覆盖重数或非单射参数化需要另行处理，本期只用嵌入。
+
+\textbf{一个完整的曲线例子}\quad 在平面上取 $\alpha=x\D y$，$\gamma(s)=(s,s^2)$，$0\le s\le1$。拉回给出
+\[
+ \gamma^*\alpha=(x\circ\gamma)\D(y\circ\gamma)
+ =s\D(s^2)=2s^2\D s,\qquad
+ \int_\gamma\alpha=\int_0^1 2s^2\D s=\frac23.
+\]
+因而积分实际累积的是沿抛物线的 $x\,\D y$。度规和弧长都未参与这个定义；若把路径反向，结果为 $-2/3$。
+
+定向指定哪一类有序基为正向；两组基之间的变换行列式为正时，它们定向相同。用 $\D u\wedge\D v$ 指定正向，是要求它在正向基上的取值为正。Stokes 公式连接区域内部的导数与边界上的积分。对紧致定向 $n$ 维流形 $D$ 及在其上光滑的 $n-1$ 形式 $\eta$，
+\[
+ \int_D\D\eta=\int_{\partial D}\iota^*\eta ,
+ \qquad \iota:\partial D\hookrightarrow D .
+\]
+本期允许矩形这类分片光滑边界，按各光滑边求和，角点不贡献线积分。边界采用“向外方向在前”的定向：边界上的正向切基 $v_1,\ldots,v_{n-1}$ 应使 $(n_{\rm out},v_1,\ldots,v_{n-1})$ 成为区域的正向基。这里 $n_{\rm out}$ 只需横向指向外侧，无需单位长度或度规。
+
+在正向为 $\D u\wedge\D v$ 的矩形上，底边沿 $+u$，右边沿 $+v$，顶边沿 $-u$，左边沿 $-v$。例如底边向外为 $-\partial_v$，而
+$(\D u\wedge\D v)(-\partial_v,\partial_u)=1$，所以底边正向为 $+\partial_u$。其余边也可这样逐项判断。
+
+在二维，Stokes 公式就是将 $\partial_uQ-\partial_vP$ 的面积积分写成 $P\D u+Q\D v$ 的四边积分。若有奇点、缺失的内边界或只局部定义的形式，必须先确认它在整个积分域上的适用条件。
+\newpage
+\head{独立练习\quad 先完成本页，再对照解答}
+\subsection*{1\quad 一形式的自然性\hfill 10 分钟}
+设 $\Phi:M\to N$ 光滑，$\alpha\in\Omega^1(N)$ 为光滑一形式，$\Omega^1(N)$ 表示所有光滑一形式组成的空间。利用回顾中的坐标公式、乘积规则和函数的链式法则，证明
+\[
+ \D_M(\Phi^*\alpha)=\Phi^*(\D_N\alpha).
+\]
+请展示 $\D[\alpha_\mu(\Phi)]$ 的计算，并说明为什么没有二阶导数的剩余项。证明中哪里需要映射可逆？若 $M$ 是一维，两侧会怎样？
+
+\subsection*{2\quad 在变形矩形上核对 Stokes\hfill 12 分钟}
+取 $D=[0,1]^2$，正向为 $\D u\wedge\D v$，映射
+\[
+ \Phi:D\to\mathbb R^2,\qquad (u,v)\mapsto(x,y)=(u,(1+u)v).
+\]
+目标平面上的一形式取 $\alpha=x\D y$。先算 $\Phi^*\alpha$ 和 $\Phi^*(\D\alpha)$，再独立算 $\D(\Phi^*\alpha)$。分别计算面积积分与四条边的线积分，验证
+\[
+ \int_D\Phi^*(\D\alpha)=\int_{\partial D}\Phi^*\alpha .
+\]
+边界积分中的限制映射从略。说明 $\Phi$ 在该区域为何是嵌入；若同时反转区域及其诱导边界的定向，等式怎样变化？
+
+\subsection*{3\quad AdS$_2$ 有限区域的电荷收支\hfill 15 分钟}
+令 $t,z$ 为无量纲坐标，$0<z_1<z_2$，$t_0<t_1$。在 AdS$_2$ 坐标片取
+\[
+ g=\frac{L^2}{z^2}(-\D t^2+\D z^2),\qquad L>0,
+ \qquad D=[t_0,t_1]\times[z_1,z_2].
+\]
+号差为 $(-,+)$，区域正向取 $\D t\wedge\D z$。给定光滑试探电流
+$j=j^t\partial_t+j^z\partial_z$，定义坐标电荷密度 $\rho=(L^2/z^2)j^t$、沿 $+z$ 的坐标通量 $q=(L^2/z^2)j^z$，以及电流一形式
+\[
+ \omega=\rho\D z-q\D t,\qquad Q(t):=\int_{z_1}^{z_2}\rho(t,z)\D z .
+\]
+采用局部守恒式 $\partial_t\rho+\partial_zq=0$。求 $\D\omega$，用四边拉回与 Stokes 推出 $Q(t_1)-Q(t_0)$ 的通量表达式。再对 $\rho=z\cos t,\ q=(z^2/2)\sin t$ 核对局部和积分守恒。若 $\rho$ 在区间内变化，$Q$ 必然不守恒吗？
+\newpage
+\head{详细解答（一）\quad 交换关系与边界符号}
+\subsection*{1\quad 链式法则怎样进入证明}
+在任意适用的坐标邻域内，$\Phi^*\alpha=\alpha_\mu(\Phi)\D\Phi^\mu$。对每一求和项应用乘积规则，
+\[
+\begin{aligned}
+ \D(\Phi^*\alpha)
+ &=\D[\alpha_\mu(\Phi)]\wedge\D\Phi^\mu
+   +\alpha_\mu(\Phi)\D^2\Phi^\mu,\\
+ \D[\alpha_\mu(\Phi)]
+ &=(\partial_\nu\alpha_\mu)(\Phi)
+       (\partial_a\Phi^\nu)\D u^a
+  =(\partial_\nu\alpha_\mu)(\Phi)\D\Phi^\nu .
+\end{aligned}
+\]
+因 $\Phi^\mu$ 是光滑函数，
+$\D^2\Phi^\mu=(\partial_b\partial_a\Phi^\mu)\D u^b\wedge\D u^a=0$。
+交换偏导不改变系数，交换 $a,b$ 则使楔积反号，两两抵消。由此
+\[
+ \D(\Phi^*\alpha)
+ = (\partial_\nu\alpha_\mu)(\Phi)\D\Phi^\nu\wedge\D\Phi^\mu
+ =\Phi^*((\partial_\nu\alpha_\mu)\D x^\nu\wedge\D x^\mu).
+\]
+最后一项正是 $\Phi^*(\D\alpha)$。等式在每个坐标邻域成立，故成立于整个 $M$。全程没有使用逆映射或逆 Jacobian。若 $\dim M=1$，所有二形式均为零，两侧都为零，即使 $N$ 上的 $\D\alpha$ 不为零。拉回后消失不能反推出原形式消失。
+
+\subsection*{2\quad 面积与四边逐项相等}
+由 $\D y=v\D u+(1+u)\D v$，
+\[
+ \beta:=\Phi^*\alpha=uv\D u+u(1+u)\D v .
+\]
+目标空间 $\D\alpha=\D x\wedge\D y$，所以
+\[
+ \Phi^*(\D\alpha)=\D u\wedge[v\D u+(1+u)\D v]
+ =(1+u)\D u\wedge\D v .
+\]
+独立地在源空间求导，
+\[
+\begin{aligned}
+ \D\beta
+ &=(v\D u+u\D v)\wedge\D u+(1+2u)\D u\wedge\D v\\
+ &=(-u+1+2u)\D u\wedge\D v=(1+u)\D u\wedge\D v .
+\end{aligned}
+\]
+面积积分为 $\int_0^1\int_0^1(1+u)\D v\D u=3/2$。底边 $v=0$ 的拉回为零，右边 $u=1$ 给出 $\int_0^1 2\D v=2$，顶边 $v=1$ 给出 $\int_1^0u\D u=-1/2$，左边 $u=0$ 为零。因此总和也是 $3/2$。
+
+Jacobian 行列式为 $1+u>0$，且逆映射为 $u=x,v=y/(1+x)$，在像的邻域光滑，故这是保持定向的嵌入（边界处按带角区域理解）。同时反转两种定向后，两侧均为 $-3/2$，等式保持成立。
+\newpage
+\head{详细解答（二）\quad 引力背景中的积分守恒}
+\subsection*{3\quad 局部变化与边界流出}
+先求外微分，保留 $\D t\wedge\D z$ 的顺序，
+\[
+\begin{aligned}
+ \D\omega
+ &=(\partial_t\rho\D t+\partial_z\rho\D z)\wedge\D z
+ -(\partial_tq\D t+\partial_zq\D z)\wedge\D t\\
+ &=(\partial_t\rho+\partial_zq)\D t\wedge\D z=0 .
+\end{aligned}
+\]
+这里 $\sqrt{|\det g|}=L^2/z^2$，所以所给连续性方程正是
+$\partial_\mu(\sqrt{|g|}j^\mu)=0$，即协变电流守恒的坐标密度表达。它说明局部电荷的增加由进入该区域的净流量补偿。本题只检验守恒电流的几何收支，不要求该电流反作用于度规。
+
+按 $(t,z)$ 的顺序，四边拉回和取向给出
+\[
+\begin{array}{c|c|c}
+ \text{边界}&\text{积分方向}&\text{积分贡献}\\ \hline
+ z=z_1&t_0\to t_1&-\int_{t_0}^{t_1}q(t,z_1)\D t\\
+ t=t_1&z_1\to z_2&Q(t_1)\\
+ z=z_2&t_1\to t_0&+\int_{t_0}^{t_1}q(t,z_2)\D t\\
+ t=t_0&z_2\to z_1&-Q(t_0)
+\end{array}
+\]
+Stokes 公式将总和置为零，得到
+\[
+ \boxed{Q(t_1)-Q(t_0)
+ =-\int_{t_0}^{t_1}[q(t,z_2)-q(t,z_1)]\D t.}
+\]
+沿 $+z$ 的流量在右端是流出，在左端是流入，故净流出取二者之差。该符号也可直接积分连续性方程检查：
+$\D Q/\D t=-\int_{z_1}^{z_2}\partial_zq\D z=-q(t,z_2)+q(t,z_1)$。
+
+对指定例子，$\partial_t\rho=-z\sin t$、$\partial_zq=z\sin t$，相加为零。记 $C=(z_2^2-z_1^2)/2$，则
+\[
+ Q(t)=C\cos t,\quad
+ -\int_{t_0}^{t_1}[q(t,z_2)-q(t,z_1)]\D t
+ =-C\int_{t_0}^{t_1}\sin t\D t
+ =C(\cos t_1-\cos t_0).
+\]
+这与电荷差吻合。此例允许电荷密度有符号，并可作为光滑试探电流；不额外假设电流必须处处类时。
+
+区域内密度改变并不必然改变总电荷。对一般守恒电流，$Q$ 是否恒定由两端通量之差决定。例如区间内可发生电荷重新分布而两端通量相同。对上面的特定例子，$Q$ 通常随时间变化，但某些起止时刻的总电荷也可相等。
+\newpage
+\head{工具卡与条件检查}
+\textbf{工具卡 1\quad 积分前先拉回}\par
+对路径 $\gamma$，依次替换系数 $\alpha_\mu\mapsto\alpha_\mu\circ\gamma$ 和基底 $\D x^\mu\mapsto\D(x^\mu\circ\gamma)$。最后得到参数的一形式再积分。对曲面逐个处理楔积中的基底。不要把坐标微分与弧长混同。
+
+\textbf{工具卡 2\quad 外微分与限制可以交换}\par
+光滑 $\Phi$ 和光滑形式满足 $\D\Phi^*=\Phi^*\D$。一形式的证明由链式法则及 $\D^2=0$ 完成，推广到任意次数时，对局部展开中的每一个坐标微分重复同一乘积运算即可。可逆性不在条件之列；拉回是否保留非零信息则是另一个问题。
+
+\textbf{工具卡 3\quad 用四边表检查守恒式}\par
+先规定区域正向，逐边选择“向外在前”的正向切向量，再拉回电流形式。在本期约定下，结果为
+\[
+ \text{末态电荷}-\text{初态电荷}
+ +\text{时间段内净流出}=0 .
+\]
+左右边界不能都当成沿坐标增加的方向积分。对 Lorentz 度规，Stokes 定向仍由上述几何规则决定。
+
+\subsection*{本期需要辨清的条件}
+\begin{itemize}
+\item $\Phi^*\alpha$ 与 $\alpha$ 属于不同空间，比较导数时必须先把对象放到同一空间。题 1 的等式两边均属于 $\Omega^2(M)$。
+\item 形式的定义、拉回与 Stokes 公式不需要度规。题 3 的度规出现在将电流分量转为坐标密度的因子中。
+\item 局部守恒 $\D\omega=0$ 允许有限区域与外界交换电荷。只有边界净通量为零，区域电荷才在整个时间段保持恒定。
+\item 光滑性必须覆盖实际积分区域。奇点或挖去的区域可能增加内边界，其积分不能省略。
+\end{itemize}
+
+\subsection*{参考资料}
+David Tong, \textit{General Relativity}, \S2.4.4--2.4.5（形式的积分与 Stokes 公式），\S3.2.4（散度定理）。本期独立固定了边界与电流形式的符号约定，使用参考资料时应先核对定向。\par
+\url{https://www.davidtong.org/teaching/general-relativity/grhtml/S2}\par
+\url{https://www.davidtong.org/teaching/general-relativity/grhtml/S3}
+
+\subsection*{系列记录}
+本期编号 03。核心技能为一形式自然性的逐项证明、参数域与边界的积分、曲时空电流收支。题目指纹为一般一形式链式法则、伸缩矩形 $y=(1+u)v$、AdS$_2$ 余弦电荷密度与正弦通量。前两期提供拉回与外微分的计算工具；下一单元为 04“向量场的流与 Lie 括号”。已提供第 02 期修订材料；各期完成与掌握状态待反馈。
+\end{document}
