@@ -1,0 +1,221 @@
+% UTF-8; compile twice with XeLaTeX. Requires fontspec and Noto Sans CJK SC.
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec,amsmath,amssymb,xcolor}
+\usepackage[margin=24mm]{geometry}
+\usepackage[unicode,hidelinks,pdftitle={引力几何练习04：向量场的流与Lie括号}]{hyperref}
+\setmainfont[BoldFont={Noto Sans CJK SC},ItalicFont={Noto Sans CJK SC}]{Noto Sans CJK SC}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip=0pt plus 1pt
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}\linespread{1.12}
+\newcommand{\D}{\mathrm d}
+\newcommand{\head}[1]{\section*{\color{teal}#1}}
+\pagestyle{myheadings}\markright{引力几何练习\quad /\quad 04}
+\begin{document}
+{\large 引力研究微分几何短练习\hfill 2026 年 11 月 18 日}
+\head{04\quad 向量场的流与 Lie 括号}
+\textbf{目标与前置知识}\quad 将向量场转化为有限变换，检查变换顺序，并在 AdS$_2$ 中识别相应的几何作用。只需要多元微分、简单常微分方程及度规拉回。回顾约15--20分钟，独立做题约35--40分钟，含核对解答共60--90分钟。期号表示材料进度，不表示学习完成。
+\head{知识回顾（一）\quad 从方向导数到流}
+在光滑流形 $M$ 的坐标区域中，向量场写成 $X=X^\mu(x)\partial_\mu$，其中 $\partial_\mu=\partial/\partial x^\mu$，重复指标求和。$X_p\in T_pM$ 是点 $p$ 处的向量，而 $X$ 为每一点指定一个向量。对光滑实函数 $f:M\to\mathbb R$，
+\[
+ X(f)(p)=X^\mu(p)\partial_\mu f(p).
+\]
+基底 $\partial_\mu$ 负责求导，分量 $X^\mu$ 给出各坐标方向的变化率。这里没有使用度规；向量分量不是用度规测得的单位方向分量。
+
+要把这些逐点给定的方向变成连续运动，需要寻找曲线 $\gamma_p:I_p\to M$，满足 $0\in I_p$、$\gamma_p(0)=p$ 及 $\dot\gamma_p(s)=X_{\gamma_p(s)}$。这称为以 $p$ 为初值的积分曲线。其坐标方程为
+\[
+ \frac{\D x^\mu(s)}{\D s}=X^\mu(x(s)),\qquad x^\mu(0)=x^\mu(p).
+\]
+右端必须在运动到的点 $x(s)$ 处取值，不能一直代入初值。$s$ 是流参数；它既不必等于某个坐标，也不必是固有时。光滑性保证局部解的存在与唯一性。
+
+把所有初值对应的解合在一起，得到局部流 $F_s(p)=\gamma_p(s)$。固定 $p$ 改变 $s$，得到一条曲线；固定 $s$ 改变 $p$，得到一个映射 $F_s:U_s\to U_{-s}$，其逆为 $F_{-s}$。定义域取最大流中允许该参数的点集。沿同一条解先走 $t$ 再走 $s$，由自治方程的解唯一性有
+\[
+ F_0=\mathrm{id},\qquad F_s\circ F_t=F_{s+t}
+\]
+（只在各步都有定义时使用）。若每个初值的解都对所有 $s\in\mathbb R$ 存在，才称 $X$ 完备。光滑性本身并不保证完备性。
+
+\textbf{最小算例：剪切流。} 在 $\mathbb R^2$ 上取 $V=y\partial_x$。初值为 $(a,b)$，则
+\[
+ \dot y=0\Rightarrow y(s)=b,\qquad
+ \dot x=y(s)=b\Rightarrow x(s)=a+sb.
+\]
+故 $F_s(a,b)=(a+sb,b)$，且 $F_s(F_t(a,b))=(a+(s+t)b,b)$。在不同高度，水平位移不同。对 $f(x,y)=x^2$，
+\[
+ \left.\frac{\D}{\D s}f(F_s(a,b))\right|_{s=0}
+ =\left.\frac{\D}{\D s}(a+sb)^2\right|_{s=0}=2ab=V(f)(a,b).
+\]
+这说明向量场是有限变换在参数零点的生成元，而不是有限位移本身。
+\newpage
+\head{知识回顾（二）\quad 交换求导与交换流}
+两个向量场 $X,Y$ 都能作用于函数。连续作用的次序一般有影响，定义
+\[
+ [X,Y](f):=X(Y(f))-Y(X(f)).
+\]
+这是 Lie 括号的定义。它不等于逐点分量的乘积差，也不需要联络。展开两次求导：
+\begin{align*}
+ X(Y(f))&=X^\mu(\partial_\mu Y^\nu)\partial_\nu f
+             +X^\mu Y^\nu\partial_\mu\partial_\nu f,\\
+ Y(X(f))&=Y^\mu(\partial_\mu X^\nu)\partial_\nu f
+             +Y^\mu X^\nu\partial_\mu\partial_\nu f.
+\end{align*}
+第二行最后一项交换求和指标 $\mu,\nu$，再用混合偏导可交换，就与第一行最后一项相同。因此二阶导数相消，留下
+\[
+ [X,Y]=\bigl(X^\mu\partial_\mu Y^\nu-Y^\mu\partial_\mu X^\nu\bigr)\partial_\nu.
+\]
+结果仍是一阶方向导数，因而是向量场。指标 $\nu$ 给出输出分量，$\mu$ 是求和指标；交换 $X,Y$ 后符号反转。
+
+怎样把它与实际运动联系起来？设 $F_s$ 为 $X$ 的流，$G_t$ 为 $Y$ 的流，复合从右向左执行。在同一坐标图中，小参数展开为
+\[
+ F_s(x)=x+sX(x)+O(s^2),\quad G_t(x)=x+tY(x)+O(t^2).
+\]
+在 $G_t(F_s(x))$ 中，$Y$ 要在 $F_s(x)$ 处取值。再展开一次得到混合项 $stX^\mu\partial_\mu Y^\nu$。反序操作的混合项为 $stY^\mu\partial_\mu X^\nu$，所以
+\[
+ \bigl(G_t\circ F_s-F_s\circ G_t\bigr)^\nu(x)
+ =st[X,Y]^\nu(x)+O(|s|^2|t|+|s||t|^2).
+\]
+此处相减的是两个终点的坐标，不是流形上的点；等式表达局部展开的最低阶差异。只有混合项保留下来，因为在 $s=0$ 或 $t=0$ 时差恒为零。下面习题用精确的流检查这个符号。若需要比较回到起点附近的操作，可逐步计算 $G_{-t}\circ F_{-s}\circ G_t\circ F_s$；不要仅凭“绕一圈”猜符号。
+
+\textbf{引力应用所需的拉回规则。} 对微分同胚 $\Phi:M\to M$ 和度规 $g=g_{\mu\nu}\D x^\mu\D x^\nu$，
+\[
+ (\Phi^*g)_{ab}(u)
+ =g_{\mu\nu}(\Phi(u))\partial_a\Phi^\mu\partial_b\Phi^\nu.
+\]
+这里 $\D x^\mu\D x^\nu$ 表示对称线元记号。计算时先将度规系数代入像点，再将 $\D x^\mu$ 换成 $\D\Phi^\mu$。若 $\Phi^*g=g$，则该主动点变换保持度规，称为等距变换。并非任意流都等距；本期通过有限变换直接核对，不预设 Killing 方程。
+\newpage
+\head{练习题\quad 先独立完成，再阅读解答}
+\textbf{共同约定}\quad 所有场均光滑，$\mathbb R^2$ 坐标为 $(x,y)$；$F\circ G$ 表示先做 $G$ 再做 $F$。比较终点时使用题目指定的坐标。第1、2题不引入度规；第3题度规符号为 $(-,+)$。
+
+\subsection*{题1\quad 从初值问题辨认流（约10分钟）}
+(a) 在 $\mathbb R^2$ 上分别求 $P=\partial_x$ 与 $S=x\partial_x$ 的流，以 $(a,b)$ 为初值。检查微分方程、零参数条件及参数相加的复合性质。它们是否完备？在 $a=0$ 处，$S$ 的流是否仍有定义？
+
+(b) 一个光滑向量场一定能生成所有参数下的变换吗？在 $M=(0,\infty)$ 上取 $W=x^2\partial_x$，求初值 $x(0)=a>0$ 的最大积分曲线及参数区间，并说明为何不能跨过发散时刻继续使用同一条曲线。
+
+\subsection*{题2\quad 操作顺序与括号符号（约12分钟）}
+在 $\mathbb R^2$ 上取 $X=\partial_x$、$Y=x\partial_y$，分别以 $F_s,G_t$ 表示其流。
+
+(a) 求两族流，逐步写出 $(G_t\circ F_s)(a,b)$ 与 $(F_s\circ G_t)(a,b)$。计算“先 $X$ 后 $Y$”减去“先 $Y$ 后 $X$”的坐标差。
+
+(b) 用坐标公式求 $[X,Y]$，再对任意光滑函数 $f$ 展开 $X(Y(f))-Y(X(f))$，核对两种结果。将结果与(a)比较。
+
+(c) 逐步计算 $G_{-t}\circ F_{-s}\circ G_t\circ F_s(a,b)$。是否精确返回起点 $(a,b)$？在 $a=0$ 处 $Y$ 的值为零，这能否推出流在该点附近可交换？
+
+\subsection*{题3\quad AdS$_2$ 中的时间平移与缩放（约15分钟）}
+取 Poincar\'e 区域 $M=\{(t,z):t\in\mathbb R,z>0\}$，
+\[
+ g=\frac{L^2}{z^2}(-\D t^2+\D z^2),\qquad L>0.
+\]
+坐标 $t,z$ 与 $L$ 具有长度量纲。定义 $H=\partial_t$ 和 $D=t\partial_t+z\partial_z$。令 $T_a$ 为 $H$ 的流，$A_s$ 为 $D$ 的流，其中 $a$ 有长度量纲，$s$ 无量纲。
+
+(a) 求 $T_a,A_s$ 并检查它们保持 $z>0$。使用回顾中的拉回规则，直接验证两者都保持 $g$。
+
+(b) 求 $[D,H]$，并计算 $(T_a\circ A_s)(t,z)-(A_s\circ T_a)(t,z)$ 的坐标差。取小 $s$ 展开，核对与括号的符号一致。
+
+(c) 固定截断曲线 $C_\epsilon=\{z=\epsilon\}$，其中 $\epsilon>0$。两族流分别将它映到哪条曲线？保持体时空度规是否意味着保持这一固定截断曲线？
+
+\textbf{自查}\quad 每一步流的速度是在当前位置取值吗？复合顺序是否从右向左？是否把度规不变与坐标值不变混为一谈？
+\newpage
+\head{详细解答（一）\quad 初值、定义域与顺序}
+\subsection*{题1解答}
+(a) 对 $P$，方程为 $\dot x=1,\dot y=0$，积分并使用初值得
+\[
+ F_s^P(a,b)=(a+s,b).
+\]
+对 $S$，方程为 $\dot x=x,\dot y=0$，得到
+\[
+ F_s^S(a,b)=(e^sa,b).
+\]
+求导分别得到 $(1,0)$ 与 $(e^sa,0)$，等于相应向量场在像点的分量；$s=0$ 时均为 $(a,b)$。复合检验为
+\begin{align*}
+ F_s^P(F_t^P(a,b))&=(a+t+s,b)=F_{s+t}^P(a,b),\\
+ F_s^S(F_t^S(a,b))&=(e^se^ta,b)=F_{s+t}^S(a,b).
+\end{align*}
+两式对所有实参数都有定义，故两场都完备。$a=0$ 时缩放流固定该点：$(0,b)$。零向量不会使流失效，只会产生常值积分曲线。
+
+(b) 对 $a>0$，解始终为正的区间内可分离变量：
+\[
+ x^{-2}\D x=\D s,\quad -\frac1{x(s)}=s-\frac1a,
+ \quad x(s)=\frac{a}{1-as}.
+\]
+包含零的最大参数区间为 $I_a=(-\infty,1/a)$。直接求导得到 $\dot x=a^2/(1-as)^2=x^2$。当 $s\to(1/a)^-$，$x\to+\infty$，在 $M$ 内没有可供连续延拓的终点。$s>1/a$ 时有理表达式为负，已不属于 $M$，且跨越奇点不能组成同一条光滑曲线。因此 $W$ 光滑但不完备。
+\subsection*{题2解答}
+(a) $X$ 给出 $\dot x=1,\dot y=0$；$Y$ 给出 $\dot x=0,\dot y=x$。于是
+\[
+ F_s(a,b)=(a+s,b),\qquad G_t(a,b)=(a,b+ta).
+\]
+先 $X$ 后 $Y$ 时，第二步读到的横坐标为 $a+s$，因此
+\begin{align*}
+ (a,b)&\xrightarrow{F_s}(a+s,b)\xrightarrow{G_t}(a+s,b+t(a+s)),\\
+ (a,b)&\xrightarrow{G_t}(a,b+ta)\xrightarrow{F_s}(a+s,b+ta).
+\end{align*}
+两者坐标差精确为 $(0,st)$。两族流各自满足初值条件和参数相加律，但不同族之间并不交换。
+
+(b) 分量为 $X^x=1,X^y=0,Y^x=0,Y^y=x$，故
+\[
+ [X,Y]^x=0,\qquad [X,Y]^y=\partial_x x=1,\qquad [X,Y]=\partial_y.
+\]
+对函数再算一次：$X(Y(f))=\partial_x(x\partial_yf)=\partial_yf+x\partial_x\partial_yf$，而 $Y(X(f))=x\partial_y\partial_xf$。相减仅剩 $\partial_yf$，与分量计算及(a)的 $st$ 正号相符。
+\newpage
+\head{详细解答（二）\quad 小回路与引力应用}
+(c) 依照右至左的顺序，四步终点为
+\begin{align*}
+ (a,b)&\xrightarrow{F_s}(a+s,b)
+ \xrightarrow{G_t}(a+s,b+t(a+s))\\
+ &\xrightarrow{F_{-s}}(a,b+t(a+s))
+ \xrightarrow{G_{-t}}(a,b+st).
+\end{align*}
+除非 $st=0$，否则不返回起点。即使 $a=0$，第一步后 $x=s$，此处的 $Y$ 已非零；括号还取决于场在邻域中的变化，不能只比较初始点的两个向量值。
+\subsection*{题3解答}
+(a) 对 $H$，$\D t/\D a=1,\D z/\D a=0$；对 $D$，$\D t/\D s=t,\D z/\D s=z$。所以
+\[
+ T_a(t,z)=(t+a,z),\qquad A_s(t,z)=(e^st,e^sz).
+\]
+两者在该区域内对所有实参数都有定义，因为 $z>0$ 且 $e^s>0$。这是该区域上的完备性判断，不需要把坐标延拓到其他区域。
+
+平移时像点的径向坐标不变，$\D(t+a)=\D t$（$a$ 为固定参数），故
+\[
+ T_a^*g=\frac{L^2}{z^2}\bigl(-\D(t+a)^2+\D z^2\bigr)=g.
+\]
+缩放时要同时处理系数与微分：
+\begin{align*}
+ A_s^*g
+ &=\frac{L^2}{(e^sz)^2}\bigl(-\D(e^st)^2+\D(e^sz)^2\bigr)\\
+ &=e^{-2s}\frac{L^2}{z^2}\,e^{2s}(-\D t^2+\D z^2)=g.
+\end{align*}
+固定 $s$ 时 $\D e^s=0$。这说明两者都是主动等距变换：时空点被移动，但相邻位移的度规配对保持不变。缩放坐标并不使对应的固有间隔等比例放大，度规系数的变化恰好抵消微分的缩放。
+
+(b) 在 $(t,z)$ 坐标中 $D^\mu=(t,z)$，$H^\mu=(1,0)$，从而
+\[
+ [D,H]^t=D(1)-H(t)=-1,\quad [D,H]^z=D(0)-H(z)=0,
+ \quad [D,H]=-H.
+\]
+两种顺序分别为
+\[
+ T_a(A_s(t,z))=(e^st+a,e^sz),\quad
+ A_s(T_a(t,z))=(e^st+e^sa,e^sz).
+\]
+相减得 $(a(1-e^s),0)=(-as+O(as^2),0)$，与 $sa[D,H]$ 的分量一致。这里流参数 $s$ 与时空坐标 $t$ 不可混用。
+
+(c) $T_a(C_\epsilon)=C_\epsilon$，而 $A_s(C_\epsilon)=C_{e^s\epsilon}$。除 $s=0$ 外，缩放不保持固定截断曲线。由此可见，保持体度规的变换不一定保持额外指定的边界位置；判断边界条件下允许哪些变换，还要检查边界数据，不能只检查体度规。
+\newpage
+\head{工具卡、错因检查与后续联系}
+\subsection*{工具卡1\quad 向量场转化为有限映射}
+输入 $X^\mu(x)$ 后，求 $\dot x^\mu=X^\mu(x(s))$ 与初值 $x(0)=p$，保留最大存在区间。输出 $F_s(p)$ 后，检查 $F_0=\mathrm{id}$、$\partial_sF_s=X\circ F_s$ 及 $F_s\circ F_t=F_{s+t}$。只有所有初值允许所有实参数时，才报告完备。
+\subsection*{工具卡2\quad 不交换的符号检查}
+先固定 $[X,Y]f=X(Yf)-Y(Xf)$。若 $F_s$ 属于 $X$、$G_t$ 属于 $Y$，则“先 $X$ 后 $Y$”减去“先 $Y$ 后 $X$”的最低阶坐标差为 $st[X,Y]$。交换相减顺序就反号。对四步复合逐步代入，比直接记忆回路方向可靠。
+\subsection*{工具卡3\quad 有限变换的等距检查}
+对 $x=\Phi(u)$，计算 $g_{\mu\nu}(\Phi(u))\partial_a\Phi^\mu\partial_b\Phi^\nu$，与 $g_{ab}(u)$ 比较。系数取值点与两个 Jacobian 因子缺一不可。随后单独检查所指定的子流形是否映回自身。
+
+\textbf{容易混淆的条件}
+\begin{itemize}
+\item 积分曲线的参数不是自动选定的固有时；任意积分曲线也不自动满足测地线方程。
+\item 流的复合律适用于同一个自治向量场，并受定义域限制。不同向量场的流一般不可交换。
+\item $Y_p=0$ 不能推出 $[X,Y]_p=0$；括号包含场的导数。题2在 $a=0$ 的计算正好检验这一点。
+\item 本期没有使用协变导数。计算括号时直接使用坐标基底下的公式；若改用非坐标基底，必须补上基底本身的括号贡献。
+\end{itemize}
+
+\textbf{与前后单元的联系}\quad 前期的拉回允许沿映射比较张量。本期得到由向量场生成的映射族。下一期固定一个点，将张量沿 $F_s$ 拉回后对参数求导，由此引入 Lie 导数；这一步才处理“沿流比较不同点的张量”的问题。本期只用函数方向导数与有限度规拉回，不要求提前掌握该定义。
+
+\textbf{参考资料}\quad David Tong, \emph{General Relativity}, 第2章，§2.2.2（向量场与括号）、§2.2.3（积分曲线）。定义及局部存在限制可对照
+\href{https://www.damtp.cam.ac.uk/user/tong/gr/grhtml/S2.html}{剑桥大学讲义网页版}（2026-11-18核验）。本期题目与解答独立编写；参考资料不替代推导。
+
+\textbf{系列记录}\quad 第04期；核心技能：求解流、检查完备性、计算 Lie 括号、核对有限操作顺序与度规拉回。题目指纹：平移/缩放与正半轴爆破解；$\partial_x$ 与 $x\partial_y$ 的四步复合；AdS$_2$ 的 $H,D$ 与固定截断曲线。下一单元：05，从流的拉回推导 Lie 导数。完成与掌握状态待反馈。
+\end{document}
