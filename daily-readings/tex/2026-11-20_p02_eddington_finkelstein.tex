@@ -1,0 +1,251 @@
+% !TeX program = xelatex
+% Compile twice with XeLaTeX. The diagram is drawn in this file with TikZ.
+\RequirePackage{fix-cm}
+\documentclass[a4paper,11pt]{article}
+\usepackage{fontspec,amsmath,amssymb}
+\usepackage[margin=23mm,top=22mm,bottom=23mm,headheight=24pt,headsep=7mm,footskip=10mm]{geometry}
+\usepackage{xcolor,fancyhdr,tikz}
+\usetikzlibrary{arrows.meta}
+\usepackage[unicode,colorlinks=true,urlcolor=teal!55!black,linkcolor=teal!55!black]{hyperref}
+\IfFontExistsTF{Noto Serif CJK SC}{\setmainfont{Noto Serif CJK SC}}{\setmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]}
+\IfFontExistsTF{Noto Sans CJK SC}{\setsansfont{Noto Sans CJK SC}}{\setsansfont{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip=0pt plus 1pt
+\definecolor{ink}{HTML}{192B39}
+\definecolor{accent}{HTML}{075F64}
+\definecolor{mute}{HTML}{4C606B}
+\definecolor{rulec}{HTML}{B8CDCD}
+\definecolor{panel}{HTML}{EFF5F4}
+\hypersetup{pdftitle={P02 入射 Eddington–Finkelstein 坐标与未来视界},pdfauthor={},pdfsubject={Schwarzschild 黑洞的光滑延拓、光锥与信号传播}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 0.5pt}
+\setlength{\abovedisplayskip}{6pt plus 1pt}
+\setlength{\belowdisplayskip}{6pt plus 1pt}
+\setlength{\abovedisplayshortskip}{4pt}
+\setlength{\belowdisplayshortskip}{5pt}
+\linespread{1.22}
+\raggedbottom
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\sffamily\small\color{mute}每日阅读\enspace /\enspace 广义相对论}
+\fancyhead[R]{\sffamily\small\color{mute}P02\enspace ·\enspace Schwarzschild 几何}
+\fancyfoot[L]{\sffamily\footnotesize\color{mute}Eddington–Finkelstein 坐标}
+\fancyfoot[R]{\sffamily\footnotesize\color{mute}\thepage\enspace /\enspace \pageref*{page:last}}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{rulec}\leaders\hrule height .45pt\hfill}}
+\newcommand{\hpage}[2]{\pdfbookmark[1]{#2}{sec#1}\noindent{\sffamily\bfseries\color{accent}\large #1}\hspace{.7em}{\sffamily\bfseries\fontsize{19}{26}\selectfont\color{ink}#2}\par\vspace{3pt}}
+\newcommand{\subt}[1]{\par\vspace{5pt}{\sffamily\bfseries\color{accent}#1}\par\nobreak}
+\newcommand{\boxnote}[2]{\par\smallskip\noindent\colorbox{panel}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}{\vspace{3pt}\leftskip=6pt\rightskip=6pt{\sffamily\bfseries\color{accent}#1}\enspace #2\par\vspace{3pt}}}\par}
+\newcommand{\dd}{\mathrm d}
+\newcommand{\rs}{r_{\mathrm s}}
+\newcommand{\scri}{\mathcal I}
+\begin{document}\color{ink}\fontsize{13}{19.7}\selectfont
+\pdfbookmark[0]{P02 入射 Eddington–Finkelstein 坐标}{begin}
+{\sffamily\bfseries\color{accent}P02\enspace /\enspace 黑洞几何}\par
+{\sffamily\bfseries\fontsize{24}{32}\selectfont 入射 Eddington–Finkelstein 坐标}\par
+{\sffamily\large\color{mute}用光信号标记事件，追踪光线穿越未来视界}\par\vspace{2pt}
+
+在面积半径 $R$ 处悬停的观测站，向一个 Schwarzschild 黑洞发出一束径向光。用外部 Schwarzschild 时间 $t$ 描述，光越接近 $r=\rs$，走完下一小段径向距离所需的坐标时间就越长。而观测站已经给这束光记下了一个有限的\textbf{发射时刻}。沿途每个事件都可以用这个时刻和当地球面的面积来标记。这样得到的是什么坐标？它能把同一束光跟踪到哪里？
+
+\subt{用发射时刻给入射光编号}
+取 $c=1$，号差 $(-+++)$，$\rs=2GM>0$。球面面积 $4\pi r^2$ 定义了面积半径 $r$。在真空外部 $r>\rs$，记 $f(r)=1-\rs/r$，度规为
+\begin{equation}\label{eq:schwarzschild}
+ \dd s^2=-f\,\dd t^2+f^{-1}\dd r^2+r^2\dd\Omega_2^2,\qquad
+ \dd\Omega_2^2=\dd\theta^2+\sin^2\theta\,\dd\phi^2 .
+\end{equation}
+固定角度并令 $\dd s^2=0$。未来指向的入射支满足 $\dd t/\dd r=-1/f$。在外部取原函数
+\begin{equation}
+ r_*(r)=r+\rs\ln\!\left(\frac{r-\rs}{\rs}\right),\qquad
+ \frac{\dd r_*}{\dd r}=\frac1f .
+\end{equation}
+沿入射光线，$\dd(t+r_*)=0$。若光在 $R$ 处的发射时刻为 $t_{\rm em}$，那么整束光经过的每个事件都满足
+\begin{equation}
+ v\equiv t+r_*(r)=t_{\rm em}+r_*(R).
+\end{equation}
+同一站连续发两束光，两束光的标签差 $\Delta v$ 等于发射坐标时间差。站上的时钟则走过 $\Delta\tau_R=\sqrt{f(R)}\,\Delta v$。因此给钟定好零点、换算一次刻度，就能给每束光标出 $v$。式中 $r_*$ 的积分常数只会平移全部标签。
+
+\boxnote{本期读法}{主线阅读与重算约 45–55 分钟，完成两道自测并核对答案约 20–30 分钟。读完应能从入射光的标签推出正则度规，画出视界两侧的未来光锥，再用两只钟解释一次信号收发。}
+
+\newpage
+\hpage{01}{一张能穿过视界的坐标图}
+当同一束光向内传播时，$r_*\to-\infty$，而 $t=t_{\rm em}+r_*(R)-r_*\to+\infty$。固定的 $v$ 已在发射时确定。要知道这个标签能否随光穿过 $r=\rs$，必须检查用 $(v,r)$ 写出的几何，以及光线本身在这套坐标中的运动。
+
+\subt{先在两张图重叠的地方换元}
+只在 $r>\rs$ 使用 $\dd t=\dd v-\dd r/f$。式\,\eqref{eq:schwarzschild} 的径向部分变成
+\begin{align}
+ -f\left(\dd v-\frac{\dd r}{f}\right)^2+\frac{\dd r^2}{f}
+ &=-f\,\dd v^2+2\,\dd v\,\dd r. \label{eq:sub}
+\end{align}
+保留下来的交叉项决定了视界上的时空度量。取坐标顺序 $(v,r)$，径向块和它的逆分别为
+\begin{equation}
+ (g_{ab})=\begin{pmatrix}-f&1\\1&0\end{pmatrix},\qquad
+ (g^{ab})=\begin{pmatrix}0&1\\1&f\end{pmatrix}.
+\end{equation}
+两个矩阵的元素在 $r=\rs$ 都光滑。径向块的行列式恒为 $-1$，因此在那里仍有一正一负两个本征值。角向部分是半径 $\rs>0$ 的球面度规，在球面的正规坐标片中同样光滑且非退化。由此可直接在 $v\in\mathbb R,\ r>0$ 上写下
+\begin{equation}
+ \boxed{\dd s^2=-f(r)\,\dd v^2+2\,\dd v\,\dd r+r^2\dd\Omega_2^2.}
+ \label{eq:ef}
+\end{equation}
+这就是入射 EF 延拓。新度规在重叠区与原解相同，并在 $r=\rs$ 两侧定义了光滑的 Lorentz 几何。旧坐标 $t$ 在交界处没有有限值，所以坐标换元和延拓是先后两个步骤。从外部计算得到曲率标量的有限极限后，仍需这样一张正则坐标图，才能在视界两侧继续使用度规。
+
+\subt{在新图中接着走同一条光线}
+取 $v=v_0$、角度固定，令 $r=r_0-E(\lambda-\lambda_0)$，其中 $E>0$ 固定仿射刻度。它的切向量是 $k=-E\partial_r$，由式\,\eqref{eq:ef} 得 $g(k,k)=0$。又因 $g_{rr}=0$ 且 $g_{\mu r}$ 均为常数，联络系数 $\Gamma^\mu{}_{rr}=0$，从而 $\nabla_k k=0$。因此这确实是一条以 $\lambda$ 为仿射参数的光线。在 $\lambda=\lambda_0+(r_0-\rs)/E$ 之后，$r$ 继续减小，方程仍然成立。沿途 $v$ 不变，$\lambda$ 则依次标记它经过的事件。光线的固有时间始终为零。
+
+\newpage
+\hpage{02}{把两束光都朝未来画}
+令式\,\eqref{eq:ef} 中的角度固定，径向零条件分解为
+\begin{equation}
+ \dd v\,(2\,\dd r-f\,\dd v)=0.
+\end{equation}
+第一支 $\dd v=0$ 是刚才的入射光，未来方向为 $r$ 减小。第二支在外部向外运动，满足 $\dd r/\dd v=f/2$。把两支的未来切向量选为
+\begin{equation}
+ n=-\partial_r,\qquad \ell=\partial_v+\tfrac12 f\,\partial_r,
+ \qquad g(n,\ell)=-1. \label{eq:ell}
+\end{equation}
+外部的 $\ell$ 与入射光同属未来光锥，两者内积为负。沿光滑延拓，它们始终同向于未来。下文把 $\ell$ 这一支简称为“外向光”，名称沿用它在外部的方向。沿 $\ell$ 求 $r$ 的方向导数，可直接读出球面半径怎样变化。
+\[
+ \ell(r)=\tfrac12 f(r)
+ \quad\begin{cases}
+ >0,& r>\rs,\\
+ =0,& r=\rs,\\
+ <0,& 0<r<\rs.
+ \end{cases}
+\]
+视界上的外向光沿 $r=\rs$ 前进。内部的外向光与入射光仍是两个不同的方向，但光束所在球面的面积沿两个方向都在变小。作径向自由落体的观测者在同一事件用自己的正交标架测量，两束光仍以单位速率朝相反的径向传播。
+\begin{center}
+\begin{tikzpicture}[
+  x=4.9cm,y=4.9cm, font=\small\sffamily,
+  axisline/.style={draw=black!64,thin,-{Stealth[length=1.7mm]}},
+  inray/.style={draw=blue!52!black, line width=1pt,-{Stealth[length=2.15mm]}},
+  outray/.style={draw=orange!82!black, line width=1.15pt,-{Stealth[length=2.15mm]}},
+  cone/.style={fill=blue!7!white}, line cap=round
+]
+  % Axes use equal scales. The shaded sectors are tangent cones at the dots.
+  \draw[axisline] (0.065,0) -- (2.49,0) node[right] {$r/r_s$};
+  \draw[axisline] (0.065,0) -- (0.065,1.015)
+    node[above right,inner sep=0.5pt] {$(v-r)/r_s$};
+  \draw[black!55,dashed,thin] (1,0) -- (1,.989);
+  \node[text=black!70] at (.55,.945) {视界内};
+  \node[text=black!70] at (1.83,.945) {视界外};
+  \node[anchor=west,inner sep=2.0pt,font=\footnotesize\sffamily,
+        text=black!66] at (1,.878) {$r=r_s$};
+  \foreach \xc/\val in {.5/{1/2},1/{1},2/{2}} {
+    \draw[black!63,thin] (\xc,0) -- (\xc,-.024);
+    \node[anchor=north,inner sep=1.8pt] at (\xc,-.026) {$\val$};
+  }
+  \foreach \xc in {.5,1,2} {
+    % dy=.39, dx/dy=-1 (ingoing), dx/dy=(x-1)/(x+1) (outgoing).
+    \pgfmathsetmacro{\xin}{\xc-.39}
+    \pgfmathsetmacro{\xout}{\xc+.39*(\xc-1)/(\xc+1)}
+    \fill[cone] (\xc,.30) -- (\xin,.69) -- (\xout,.69) -- cycle;
+    \draw[inray] (\xc,.30) -- (\xin,.69);
+    \draw[outray] (\xc,.30) -- (\xout,.69);
+    \fill[black!77] (\xc,.30) circle[radius=1.35pt];
+  }
+  \draw[inray] (.34,-.198) -- (.50,-.198);
+  \node[anchor=west,inner sep=3.5pt] at (.50,-.198) {入射光方向};
+  \draw[outray] (1.26,-.198) -- (1.42,-.198);
+  \node[anchor=west,inner sep=3.5pt] at (1.42,-.198) {出射光方向};
+\end{tikzpicture}
+\end{center}
+{\small\color{mute}\textbf{图 1}\enspace 三个事件处的径向未来光锥。纵轴取 $(v-r)/\rs$，使入射光指向左上方。箭头是该点的零切向，阴影内部是径向类时方向。视界上的外向箭头沿虚线向上。只有最右侧光锥允许信号传向更大的球面。}\par
+
+\newpage
+\hpage{03}{为什么转向也逃不出去}
+两条径向光线给出了光锥的径向边缘。若一艘飞船在视界内打开侧向推进器，怎样判定它还能否增大 $r$？可以对任意一条未来因果曲线证明同一个不等式。这里“因果”包括所有类时和零方向，也允许飞船加速。
+
+用点表示沿曲线未来参数的导数，切向量记作 $X$。由 $n=-\partial_r$ 可得 $g(n,X)=-\dot v$。同为未来的因果向量内积非正，故 $\dot v\geq0$。先考虑 $\dot v>0$，由 $g(X,X)\leq0$ 并除以 $\dot v^2$ 得
+\begin{equation}
+ \frac{\dd r}{\dd v}\leq \frac f2-\frac{r^2}{2}
+ \left[\left(\frac{\dd\theta}{\dd v}\right)^2+
+ \sin^2\theta\left(\frac{\dd\phi}{\dd v}\right)^2\right].
+ \label{eq:causal}
+\end{equation}
+要在同样的 $\dd v$ 内尽可能增大 $r$，应把角运动取为零，并取等号，恰得到外向径向光。若 $\dot v=0$，零锥条件迫使角运动也为零，此时只剩未来入射方向 $n$。因此在 $0<r<\rs$，每条未来因果曲线都向更小的 $r$ 走。在 $r=\rs$，唯一能保持 $r$ 的未来方向是 $\ell$，任何未来类时运动都进入内部。
+
+\subt{由光锥得到事件视界，还差哪一步}
+在给定的渐近平坦 Schwarzschild 黑洞时空中，指定这一外部区域的未来零无穷远 $\scri^+$，即向外逃逸的光在无穷远处的理想终点。$J^-(\scri^+)$ 表示能向它传出因果信号的事件集合。未来事件视界定义为这一集合在物理时空中的边界，记作
+\begin{equation}
+ \mathcal H^+=\partial J^-(\scri^+)\quad\text{（取本入射图所覆盖的部分）}.
+\end{equation}
+式\,\eqref{eq:causal} 已排除了内部的逃逸路径。外部的每一点则都能发出一束径向外向光，它从 $r_e>\rs$ 走到任意有限 $R>r_e$ 只需
+\begin{equation}
+ v_R-v_e=\int_{r_e}^{R}\frac{2\,\dd r}{f(r)}
+       =2\,[r_*(R)-r_*(r_e)]<\infty. \label{eq:travel}
+\end{equation}
+沿这条光线 $u\equiv v-2r_*$ 为常数。在渐近平坦外部，让 $r\to\infty$ 即沿固定 $u$ 走向 $\scri^+$。这才确定了两类事件的分界 $r=\rs$。单独计算法向一形式 $\dd r$ 的模方 $g^{-1}(\dd r,\dd r)=f$ 可以判定 $r=\rs$ 为零超曲面。要进一步识别事件视界，还须知道这些信号的全程去向。
+
+\newpage
+\hpage{04}{落下去的钟走了多久}
+让一架携带时钟的探测器作径向自由落体。为了得到可精确计算的例子，选择在无穷远处渐近静止的那条入落轨道，并在它经过有限半径 $r_0>\rs$ 时开始计时。用 $\tau$ 表示探测器的固有时，本页的点表示 $\dd/\dd\tau$。
+
+\subt{把手表的读数带进运动方程}
+度规不显含 $t$，所以外部时间平移的 Killing 向量 $\xi=\partial_t$ 给出每单位静质量的守恒能量 $e=-g(\xi,U)=f\dot t$，其中 $U$ 是探测器的四速度。守恒可由测地线拉格朗日量 $L=\tfrac12 g_{\mu\nu}\dot x^\mu\dot x^\nu$ 对循环坐标 $t$ 的方程直接得到。无穷远处 $f\to1$ 且探测器渐近静止，故此例 $e=1$。将它代入四速度的归一化，得
+\begin{equation}
+ -1=-f\dot t^{\,2}+\frac{\dot r^2}{f},\qquad
+ \dot r^2=e^2-f,\qquad \dot r=-\sqrt{\rs/r}\quad(e=1).
+\end{equation}
+取负根是因为探测器正在向内运动。从 $r_0$ 到 $\rs$，手表走过
+\begin{equation}
+ \tau_h-\tau_0=\int_{\rs}^{r_0}\!\sqrt{r/\rs}\,\dd r
+ =\frac{2}{3\sqrt{\rs}}\left(r_0^{3/2}-\rs^{3/2}\right).
+\end{equation}
+例如从 $r_0=4\rs$ 开始计时，所得 $14\rs/3$ 是有限的固有时间（$c=1$）。探测器经过 $4\rs$ 时已经有径向速度。若在该处从静止释放，就要改变 $e$。
+
+\subt{穿越时，新坐标记录什么}
+写 $w=\sqrt{\rs/r}$，于是 $f=(1-w)(1+w)$。先在外部消去分子与分母的公共因子，就能取视界极限。
+\begin{equation}
+ \dot v=\dot t+\frac{\dot r}{f}
+       =\frac{1-w}{1-w^2}=\frac1{1+w}
+       \ \xrightarrow{r\to\rs}\ \frac12,\qquad
+ \dot r\ \xrightarrow{r\to\rs}\ -1 .
+\end{equation}
+在新图中，探测器经过视界时的切向量有有限分量。把 $(\dot v,\dot r)=(1/2,-1)$ 代回式\,\eqref{eq:ef}，在 $f=0$ 处正得 $g(U,U)=2(1/2)(-1)=-1$。观测站若在 $t_{\rm em}=v_h-r_*(R)$ 发光，这束光恰在探测器穿越时与它相遇。这里 $v_h$ 是穿越事件的 $v$ 值，由探测器的初始数据确定。至于外部能收到它在何时发回的光，需要另外追踪外向光线。
+
+\newpage
+\hpage{05}{返回观测站的最后一段路}
+观测站仍静止在 $R>\rs$。探测器落到 $\rs<r_e<R$ 时，于事件 $(v_e,r_e)$ 朝站方发出径向光。由式\,\eqref{eq:travel}，站方的接收标签为
+\begin{equation}\label{eq:receiver}
+ v_R=v_e+2\,[r_*(R)-r_*(r_e)],\qquad
+ \dd\tau_R=\sqrt{f(R)}\,\dd v_R .
+\end{equation}
+让发射事件沿同一条下落轨道趋向穿越事件。因为 $\dot v$ 有限且穿越只需有限固有时，$v_e$ 趋于一个有限值 $v_h$。令 $r_e=\rs+\epsilon$，固定 $R$，则接收标签的近视界渐近式为
+\begin{equation}
+ v_R=-2\rs\ln(\epsilon/\rs)+\text{有限项}
+ \quad (\epsilon\to0^+).
+\end{equation}
+每个具体的视界外发射事件都有有限的到达时刻。把发射事件取得足够靠近穿越处，接收时刻就可以任意晚。视界上恰好向外发出的光沿视界生成线前进，永远碰不到站方。探测器的有限固有时与站方任意晚的接收时刻描述了两条世界线上不同的事件，二者可以同时由同一套正则坐标算出。
+
+\subt{自测一\enspace 另一种符号会延拓到哪里？}
+从外部定义 $u=t-r_*$。写出 $(u,r)$ 径向度规及其行列式。它在 $r=\rs$ 的系数也光滑。沿 $v=v_0$ 的入射光从外部接近\textbf{未来}视界时，$u$ 有什么极限？这对两张坐标图的覆盖范围意味着什么？
+
+\subt{自测二\enspace 相邻波峰到达时，间隔变了多少？}
+考虑第 5 页的 $e=1$ 探测器。把相邻波峰看作两束径向光，求站方接收间隔和探测器发射间隔的微分比 $\dd\tau_R/\dd\tau_e$。先对式\,\eqref{eq:receiver} 求导，再用 $w=\sqrt{\rs/r_e}$ 化简。求出频率比 $\nu_R/\nu_e$，并判断趋近视界时，站方看到的连续信号是红移还是蓝移。取几何光学近似下相邻波峰的局部极限。
+
+\boxnote{闭卷复现}{先画位于视界内、视界上和视界外的三个事件处的未来光锥，标出入射光、外向光和能悬停的区域。再用一句话解释为什么站方始终接收不到穿越事件本身发出的光。核对见下一页。}
+
+\newpage
+\hpage{06}{自测核对与延伸阅读}
+\subt{一\enspace 出射坐标跟随另一族光}
+代入 $\dd t=\dd u+\dd r/f$，得 $\dd s^2_{\rm rad}=-f\,\dd u^2-2\,\dd u\,\dd r$，径向块行列式仍为 $-1$。但在同一外部区域，$u=v-2r_*$。固定 $v=v_0$ 的光从外部接近未来视界时 $r_*\to-\infty$，故 $u\to+\infty$。这束光穿越的事件落在入射图的有限 $v$ 处，超出了出射图的有限 $u$ 范围。在永恒 Schwarzschild 时空中，出射坐标能以有限 $u$ 穿过\textbf{过去视界}。分别在两张图上令 $r$ 越过 $\rs$，进入的是不同区域。描述坍缩形成的黑洞时，应另外给定物质分布与时空的整体历史。
+
+\subt{二\enspace 接收间隔和频移}
+取相邻发射事件，写 $w=\sqrt{\rs/r_e}$、$f_e=1-w^2$。将式\,\eqref{eq:receiver} 沿探测器世界线对 $\tau_e$ 求导，得
+\begin{align}
+ \frac{\dd v_R}{\dd\tau_e}
+ &=\frac{\dd v_e}{\dd\tau_e}
+   -\frac{2}{f_e}\frac{\dd r_e}{\dd\tau_e}
+ =\frac1{1+w}+\frac{2w}{1-w^2}=\frac1{1-w},\\[2pt]
+ \frac{\dd\tau_R}{\dd\tau_e}
+ &=\frac{\sqrt{f(R)}}{1-\sqrt{\rs/r_e}},\qquad
+ \frac{\nu_R}{\nu_e}=\frac{1-\sqrt{\rs/r_e}}{\sqrt{f(R)}} .
+\end{align}
+固定接收站 $R$，越靠近视界发射，相邻波峰抵达站方的固有时间间隔越长，频率比趋于零。这里比较同一波列在发射与接收两端的局域频率，分母中的 $\sqrt{f(R)}$ 把接收标签换算成站上的钟读数。若两端都在弱场且初始相对速度很小，频率比回到接近 $1$。此计算适用于径向向外传播、忽略反作用的几何光学信号。
+
+\subt{读图核对}
+外部 $r>\rs$ 的固定 $r$、固定角度曲线满足 $\dd s^2=-f\,\dd v^2<0$，观测站可以悬停。视界上固定 $r$ 的径向曲线已成零线。进入内部后，固定 $r$ 的径向曲线为类空。外部的外向光能到达更大的球面，视界上的外向光恰能保持 $r$，内部的所有未来因果方向都使 $r$ 减小。
+
+\subt{参考阅读}
+{\small
+\textbf{主线}\enspace David Tong，《General Relativity》，§6.1.3。对照入射与出射 EF 图，特别留意两图各自覆盖的视界。\enspace\href{https://www.damtp.cam.ac.uk/user/tong/gr/grhtml/S6.html}{剑桥讲义 · 第 6 章}\par
+\textbf{选读}\enspace Harvey S. Reall，《Black Holes》（2024），§2.4。可从径向光线的仿射参数出发重做坐标延拓，再对照文中的因果方向。\enspace\href{https://www.damtp.cam.ac.uk/user/hsr1000/black_holes_lectures_2024.pdf}{剑桥 Part III 讲义 · PDF}\par}
+\label{page:last}
+\end{document}

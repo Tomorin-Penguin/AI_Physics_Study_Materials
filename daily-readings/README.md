@@ -8,6 +8,7 @@
 
 | 日期 | 主题 | 相关知识点 | TeX | PDF |
 | --- | --- | --- | --- | --- |
+| 2026-11-20 | P02 入射 Eddington–Finkelstein 坐标 | 入射光线的坐标标记与光滑延拓、未来光锥与事件视界、自由落体固有时、信号到达时间与频移 | [TeX](tex/2026-11-20_p02_eddington_finkelstein.tex) | [PDF](pdf/2026-11-20_p02_eddington_finkelstein.pdf) |
 | 2026-11-03 | C01 生成泛函、源与关联函数 | 欧氏源耦合与泛函导数；连通关联与累积量；高斯积分及自由场 Green 核；涨落与静态/因果响应；全息源—响应字典；Legendre 变换与 1PI 有效作用量（选读） | [TeX](tex/2026-11-03_c01_generating_functionals.tex) | [PDF](pdf/2026-11-03_c01_generating_functionals.pdf) |
 | 2026-10-29 | P01 Schwarzschild 几何：径向光线与坐标奇性 | 面积半径；径向零曲线及时间积分；局域正交余标架与光速；Kretschmann 标量；坐标奇性与曲率奇性的区别 | [TeX](tex/2026-10-29_p01_schwarzschild.tex) | [PDF](pdf/2026-10-29_p01_schwarzschild.pdf) |
 
