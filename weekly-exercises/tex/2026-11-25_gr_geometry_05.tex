@@ -1,0 +1,237 @@
+% UTF-8; XeLaTeX twice. Standalone source, no external figures.
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec,amsmath,amssymb,xcolor}
+\usepackage[margin=24mm]{geometry}
+\usepackage[unicode,hidelinks,pdftitle={引力几何练习05：从流的拉回推导Lie导数},pdfauthor={}]{hyperref}
+\setmainfont[BoldFont={Noto Sans CJK SC},ItalicFont={Noto Sans CJK SC}]{Noto Sans CJK SC}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip=0pt plus 1pt
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}\linespread{1.10}
+\newcommand{\D}{\mathrm d}\newcommand{\Lie}{\mathcal L}
+\newcommand{\head}[1]{\section*{\color{teal}#1}}
+\pagestyle{myheadings}\markright{引力几何练习\quad /\quad 05}
+\begin{document}
+{\large 引力研究微分几何短练习\hfill 2026 年 11 月 25 日}
+\head{05\quad 从流的拉回推导 Lie 导数}
+\textbf{目标与前置知识}\quad 沿向量场的流比较张量，辨认分量变化与基底变化各自的贡献，并检验一个引力背景中的完整场配置是否不变。前置知识为方向导数、局部流、Jacobian、张量积与一形式拉回；下文补齐所需规则。回顾约20分钟，独立做题约35--40分钟，含核对解答总计60--90分钟。材料进度不代表学习完成。
+\head{知识回顾（一）\quad 先把比较对象放到同一点}
+设 $M$ 为光滑 $n$ 维流形，$X=X^\mu\partial_\mu$ 为光滑向量场，$F_s$ 是其局部流：$F_0(p)=p$、$\partial_sF_s(p)=X_{F_s(p)}$。只考虑各映射都有定义的小参数；不要求流完备。坐标指标 $\mu,\nu=1,\ldots,n$，重复指标求和，$\partial_\mu=\partial/\partial x^\mu$。
+
+对函数 $f:M\to\mathbb R$，可以直接比较 $f(F_s(p))$ 与 $f(p)$，因为它们都是实数。一形式在每点给出一个作用于切向量的线性函数。但 $\alpha_p$ 属于余切空间 $T_p^*M$，$\alpha_{F_s(p)}$ 属于另一个余切空间；没有规定比较方法前，二者不能直接相减。流提供了一个自然办法：把像点的一形式拉回起点。具体地，
+\[
+ (F_s^*\alpha)_p(v_p)=\alpha_{F_s(p)}\bigl((\D F_s)_p v_p\bigr),
+ \qquad (\D F_s)_p:T_pM\longrightarrow T_{F_s(p)}M.
+\]
+其中 $v_p\in T_pM$ 是任意测试向量；$\D F_s$ 是映射的微分，不是联络。拉回后的对象属于 $T_p^*M$，于是可以定义
+\[
+ (\Lie_X\alpha)_p=\left.\frac{\D}{\D s}(F_s^*\alpha)_p\right|_{s=0}.
+\]
+这就是沿 $X$ 的 Lie 导数：固定起点，求拉回对象对流参数的变化率。对函数用 $F_s^*f=f\circ F_s$，链式法则立即给出 $\Lie_Xf=X^\mu\partial_\mu f$。整个定义不使用度规，也不使用平行输运。
+
+如何实际计算？写 $F_s^\mu(x)=x^\mu+sX^\mu(x)+O(s^2)$，则
+\begin{align*}
+ \alpha_\mu(F_s(x))&=\alpha_\mu(x)+sX^\nu\partial_\nu\alpha_\mu(x)+O(s^2),\\
+ \partial_\nu F_s^\mu(x)&=\delta^\mu_\nu+s\partial_\nu X^\mu(x)+O(s^2),\\
+ F_s^*\alpha&=\alpha_\mu(F_s(x))\partial_\nu F_s^\mu(x)\D x^\nu.
+\end{align*}
+取 $s$ 的一次项，并重新命名求和指标，得到
+\[
+ (\Lie_X\alpha)_\mu=X^\nu\partial_\nu\alpha_\mu+\alpha_\nu\partial_\mu X^\nu.
+\]
+第一项来自系数在不同点的取值；第二项来自拉回时测试方向的变化。只对系数求方向导数会遗漏第二项。$\D x^\mu(\partial_\nu)=\delta^\mu_\nu$ 是对偶配对，不需要用度规升降指标。
+\newpage
+\head{知识回顾（二）\quad 向量、一般张量与一个完整例子}
+对向量场 $Y$，流是局部微分同胚，故可以用逆微分把像点向量带回：
+\[
+ (F_s^*Y)_p=(\D F_{-s})_{F_s(p)}Y_{F_s(p)}.
+\]
+这里把逆推前称为向量的拉回。它需要映射可逆，不能不加条件地用于一般光滑映射。Jacobian 的逆矩阵在一阶为
+\[
+ (\partial F_s)^{-1\,\mu}{}_{\nu}
+ =\delta^\mu_\nu-s\partial_\nu X^\mu+O(s^2).
+\]
+乘以 $Y^\nu(F_s(x))=Y^\nu+sX^\rho\partial_\rho Y^\nu+O(s^2)$ 后，有
+\[
+ (\Lie_XY)^\mu=X^\nu\partial_\nu Y^\mu-Y^\nu\partial_\nu X^\mu=[X,Y]^\mu.
+\]
+负号来自逆 Jacobian，而不是约定随意添加的符号。本文始终使用 $\Lie_X=\left.\partial_s F_s^*\right|_0$；若改用 $F_{-s}^*$ 求导，整体会反号。
+
+一般 $(r,k)$ 型张量场是光滑地取值于 $(TM)^{\otimes r}\otimes(T^*M)^{\otimes k}$ 的场。其拉回对每个上指标使用逆 Jacobian，对每个下指标使用正 Jacobian。对乘积求导，因此 Lie 导数满足张量积的 Leibniz 法则，并与缩并交换。例如协变二阶张量 $B$ 满足
+\[
+ (\Lie_XB)_{\mu\nu}
+ =X^\rho\partial_\rho B_{\mu\nu}
+ +B_{\rho\nu}\partial_\mu X^\rho+B_{\mu\rho}\partial_\nu X^\rho.
+\]
+一般情况也按此规则逐个处理指标：每个下指标贡献一个正号项，每个上指标贡献一个负号项；其余指标原样保留。这来自有限张量变换法则，不能只把所有分量看作标量。
+
+\textbf{最小算例。} 在 $\mathbb R^2$ 上取 $V=x\partial_x$、$\beta=y\D x$。流为 $F_s(x,y)=(e^sx,y)$，故
+\[
+ F_s^*\beta=y\D(e^sx)=e^sy\D x,
+ \qquad \Lie_V\beta=y\D x.
+\]
+用分量再算：$\beta_x=y,\beta_y=0$，因此
+\[
+ (\Lie_V\beta)_x=x\partial_xy+y\partial_xx=y,\qquad
+ (\Lie_V\beta)_y=0+y\partial_yx=0.
+\]
+系数 $y$ 沿流不变，但一形式仍然改变。为检查配对，取 $Y=\partial_x$，逆 Jacobian 给出 $F_s^*Y=e^{-s}\partial_x$，所以 $\Lie_VY=-\partial_x$。于是
+\[
+ \Lie_V\bigl(\beta(Y)\bigr)=V(y)=0
+ = (\Lie_V\beta)(Y)+\beta(\Lie_VY)=y-y.
+\]
+基底变化与分量变化必须一起计入，才能与标量配对的变化相容。
+
+\textbf{引力中的使用条件。} 对度规直接令 $B=g$。由 $F_{s+h}=F_h\circ F_s$ 及拉回复合律，先对 $h$ 在零点求导，得到流导数恒等式。若 $\Lie_Xg=0$，则在流定义的区域内 $\partial_s(F_s^*g)=F_s^*(\Lie_Xg)=0$，所以该流保持度规。多个场组成的配置要逐个检验；度规不变不能替代标量场不变。以下仅检验给定变换，不求解完整 Killing 方程。
+\newpage
+\head{练习题\quad 全部题目}
+\textbf{约定}\quad 所有场均光滑；前两题坐标与参数无量纲且不引入度规。$\alpha\otimes\beta$ 是张量积，作用于 $(u,v)$ 为 $\alpha(u)\beta(v)$。第3题符号为 $(-,+)$，线元中 $\D t^2$ 表示 $\D t\otimes\D t$。
+\subsection*{题1\quad 为什么不能只对分量求导（约10分钟）}
+在 $\mathbb R^2$ 上取 $X=y\partial_x$、$\alpha=\D x$、$Y=\partial_y$。
+
+(a) 求 $X$ 的流 $F_s$，直接计算 $F_s^*\alpha$ 和 $F_s^*Y$，再对 $s$ 求导。
+
+(b) 本例 $\alpha$ 的坐标分量都是常数。这是否意味着 $\Lie_X\alpha=0$？用一形式坐标公式核验(a)，并核验
+\[
+ X\bigl(\alpha(Y)\bigr)=(\Lie_X\alpha)(Y)+\alpha(\Lie_XY).
+\]
+说明上述等式两边的对象类型，以及常数分量为何不能保证张量沿流不变。
+\subsection*{题2\quad 两个协变指标的实际计算（约12分钟）}
+仍在 $\mathbb R^2$，现在取 $X=x\partial_y$、$B=y\D x\otimes\D x+\D y\otimes\D y$。$B$ 只是协变二阶张量，不要求其非退化。
+
+(a) 求 $F_s$。分别计算 $B$ 的系数取值和基底拉回，写出完整 $F_s^*B$，保留包括 $s^2$ 的项，然后求 $\Lie_XB$。
+
+(b) 用坐标公式独立计算 $(\Lie_XB)_{xx}$、$(\Lie_XB)_{xy}$、$(\Lie_XB)_{yy}$，与(a)核对。若只计算 $X(B_{\mu\nu})$，漏掉什么？在 $x=0$ 处 $X_p=0$，是否足以推出 $(\Lie_XB)_p=0$？
+\subsection*{题3\quad AdS$_2$ 度规与 dilaton 的共同不变性（约15分钟）}
+在 $M=\{(t,z):t\in\mathbb R,z>0\}$ 上，给定
+\[
+ g=\frac{L^2}{z^2}(-\D t^2+\D z^2),\qquad
+ \phi=\frac{a}{z},\qquad K=(t^2+z^2)\partial_t+2tz\partial_z.
+\]
+其中 $L,a>0$ 为固定长度，$t,z$ 有长度量纲，$\phi$ 无量纲，$K$ 的流参数有逆长度量纲。$\phi$ 称为 dilaton（二维引力中的标量场）；本题只检验给定场配置，不要求使用场方程。
+
+(a) 用坐标公式逐项计算 $(\Lie_Kg)_{tt},(\Lie_Kg)_{tz},(\Lie_Kg)_{zz}$。不得因认出一个熟悉的生成元就省略运算。
+
+(b) 计算 $\Lie_K\phi$ 与 $\Lie_K(\phi g)$。该变换是否同时保持 $g$ 与 $\phi$？在 $t=0$ 的一条线上某变化率为零，是否足以证明整个场不变？
+
+(c) 对固定 $\phi=\phi_c>0$ 的等值线，写出其位置和 $K$ 的径向分量，判断该流能否把整条等值线映回自身。区分“变换后仍是张量场”与“给定场配置在变换下不变”。
+\newpage
+\head{详细解答（一）\quad 拉回、配对与两个指标}
+\subsection*{题1解答}
+(a) 积分曲线满足 $\dot x=y,\dot y=0$，初值为 $(x,y)$ 时
+\[
+ F_s(x,y)=(x+sy,y),\quad
+ J=\begin{pmatrix}1&s\\0&1\end{pmatrix},\quad
+ J^{-1}=\begin{pmatrix}1&-s\\0&1\end{pmatrix}.
+\]
+$J$ 从起点切空间映到像点切空间。于是
+\begin{align*}
+ F_s^*\alpha&=\D(x+sy)=\D x+s\D y,&\Lie_X\alpha&=\D y,\\
+ F_s^*Y&=J^{-1}\binom{0}{1}=-s\partial_x+\partial_y,
+ &\Lie_XY&=-\partial_x.
+\end{align*}
+求微分时 $s$ 固定，所以 $\D s=0$。这两条等式都是把像点对象带回起点后得到的。
+
+(b) 分量为 $X^x=y,X^y=0,\alpha_x=1,\alpha_y=0$，故
+\[
+ (\Lie_X\alpha)_x=0+\partial_xy=0,\qquad
+ (\Lie_X\alpha)_y=0+\partial_yy=1.
+\]
+由于 $\alpha(Y)=0$，左边是零函数的方向导数，即零。右边为
+\[
+ \D y(\partial_y)+\D x(-\partial_x)=1-1=0.
+\]
+$\Lie_X\alpha$ 是一形式，$\Lie_XY$ 是向量场；各项配对后才成为标量函数。虽然 $\alpha$ 的系数不变，流的 Jacobian 会改变拉回的基底，因此不能省略 $\alpha_\nu\partial_\mu X^\nu$。
+\subsection*{题2解答}
+(a) 方程 $\dot x=0,\dot y=x$ 给出 $F_s(x,y)=(x,y+sx)$。系数变为 $y+sx$，微分变为 $\D x,\D y+s\D x$，所以
+\begin{align*}
+ F_s^*B&=(y+sx)\D x\otimes\D x
+ +(\D y+s\D x)\otimes(\D y+s\D x)\\
+ &=B+s\bigl[x\D x\otimes\D x+\D x\otimes\D y+\D y\otimes\D x\bigr]
+ +s^2\D x\otimes\D x.
+\end{align*}
+对 $s$ 求导并取零，结果为方括号中的二阶张量。两个混合张量积分别存在；用对称线元记号可合写成 $2\D x\D y$，但分量 $B_{xy}$ 不因此多一倍。
+
+(b) $B_{xx}=y,B_{xy}=0,B_{yy}=1$，唯一非零的 $\partial_\mu X^\nu$ 是 $\partial_xX^y=1$。因此
+\begin{align*}
+ (\Lie_XB)_{xx}&=x\partial_y y+B_{yx}\cdot1+B_{xy}\cdot1=x,\\
+ (\Lie_XB)_{xy}&=x\partial_y0+B_{yy}\cdot1+0=1,\\
+ (\Lie_XB)_{yy}&=x\partial_y1+0+0=0.
+\end{align*}
+对称性给出 $yx$ 分量也为1。只求系数方向导数会漏掉两个混合项。在 $x=0$ 处，$X_p=0$，但 $\partial_xX^y=1$ 仍非零；流固定该点，却会剪切该点的切向量。因此 $(\Lie_XB)_p$ 仍有非零混合分量。此处的结论不依赖 $B$ 是否非退化。
+\newpage
+\head{详细解答（二）\quad 引力背景中的完整配置}
+\subsection*{题3解答}
+(a) 记 $A=L^2/z^2$，则 $g_{tt}=-A,g_{zz}=A,g_{tz}=0$，且
+\[
+ \partial_z g_{tt}=2A/z,\quad \partial_zg_{zz}=-2A/z,
+ \quad\partial_tg_{\mu\nu}=0.
+\]
+向量场的偏导为
+\[
+ \partial_tK^t=2t,\quad\partial_zK^t=2z,\quad
+ \partial_tK^z=2z,\quad\partial_zK^z=2t.
+\]
+分别代入三个分量：
+\begin{align*}
+ (\Lie_Kg)_{tt}
+ &=K^z\partial_zg_{tt}+2g_{tt}\partial_tK^t
+ =(2tz)(2A/z)+2(-A)(2t)=0,\\
+ (\Lie_Kg)_{tz}
+ &=K^\rho\partial_\rho0+g_{zz}\partial_tK^z+g_{tt}\partial_zK^t
+ =A(2z)-A(2z)=0,\\
+ (\Lie_Kg)_{zz}
+ &=K^z\partial_zg_{zz}+2g_{zz}\partial_zK^z
+ =(2tz)(-2A/z)+2A(2t)=0.
+\end{align*}
+故 $\Lie_Kg=0$。检验中，系数项与基底项分别非零，必须合起来才得到零。由回顾中的流导数恒等式，局部流保持度规；不据此断言它在整个 Poincar\'e 区域对任意参数均有定义。
+
+(b) 标量无基底项，故
+\[
+ \Lie_K\phi=K^t\partial_t\phi+K^z\partial_z\phi
+ =0+(2tz)(-a/z^2)=-2t\phi.
+\]
+利用乘积法则，
+\[
+ \Lie_K(\phi g)=(\Lie_K\phi)g+\phi\Lie_Kg=-2t\phi g.
+\]
+这一配置的度规保持不变，但 dilaton 一般改变，故 $(g,\phi)$ 整体不变的条件不满足。$t=0$ 线上一阶变化率为零，仅是该线上的逐点结论。流不留在这条线上：此处 $K^t=z^2>0$。还可进一步核验
+\[
+ \Lie_K^2\phi=K(-2t\phi)
+ =-2(t^2+z^2)\phi+4t^2\phi=2(t^2-z^2)\phi.
+\]
+在 $t=0$ 时为 $-2z^2\phi\ne0$；所以即使从该线出发，有限小参数下的标量也不保持常值。
+
+(c) 因为 $a,\phi_c>0$，等值线是 $z=z_c=a/\phi_c>0$。保持它的流必须在整条线上切向，即 $K(z-z_c)|_{z_c}=0$。实际为
+\[
+ K^z|_{z_c}=2tz_c,
+\]
+只在 $t=0$ 处为零，不在整条线上为零；因此该流不能保持整条等值线。由于 $\D\phi=-a\D z/z^2$ 在该区域从不为零，等价检验为 $K(\phi)=0$ 是否在整条线上成立。
+
+\textbf{物理含义}\quad 微分同胚把各个场按各自张量类型变换，这是协变变换规则。要求某个给定配置在拉回后等于自身，则额外要求所有场的 Lie 导数均为零。只有体度规等距，不能推出它保持指定的 dilaton 等值线或边界数据。本题也没有把微分同胚产生的配置变化直接解释为可观测的物理差异；这还取决于规范识别及边界条件。
+\newpage
+\head{工具卡、条件辨析与系列记录}
+\subsection*{工具卡1\quad 固定起点再求导}
+给定 $X$ 的流 $F_s$，令 $\Lie_XT=\left.\partial_sF_s^*T\right|_0$。协变指标用正 Jacobian，逆变指标用逆 Jacobian。一般映射的拉回天然适用于协变张量；对向量采用此定义时必须有局部逆。若直接比较不同点的分量，应先说明采用了哪一种比较规则。
+\subsection*{工具卡2\quad 每个指标都有贡献}
+标量：$\Lie_Xf=X(f)$。向量：$\Lie_XY=[X,Y]$。一形式：
+\[
+ (\Lie_X\alpha)_\mu=X^\nu\partial_\nu\alpha_\mu+\alpha_\nu\partial_\mu X^\nu.
+\]
+协变二阶张量再增加第二个下指标对应的正号项。用一次有限拉回求导，或用配对的 Leibniz 法则，可以独立检查符号及遗漏的基底贡献。本期公式使用坐标基底；非坐标基底不能机械照抄偏导公式。
+\subsection*{工具卡3\quad 检查完整配置与子流形}
+对 $(g,\phi,\ldots)$ 分别求 $\Lie_Xg,\Lie_X\phi,\ldots$。局部流保持某张量，需要该张量的 Lie 导数在相关开集上恒为零。对正规等值面 $h=c$（$\D h\ne0$），保持条件为 $X(h)=0$ 在整张等值面上成立；只在一个点成立不足以保证保持整张面。
+
+\textbf{容易混淆的条件}
+\begin{itemize}
+\item 常数坐标分量不等于沿任意流不变。题1的 $\D x$ 提供了直接反例。
+\item $X_p=0$ 只固定该点，不必固定该点的切空间中的每个向量；$\partial_\mu X^\nu$ 仍可能非零。题2检验了这一区别。
+\item 不需要度规即可定义 Lie 导数。不能把它直接替换为沿曲线的协变导数；两者采用不同的比较方法。
+\item $\Lie_Xg=0$ 是度规等距的无穷小条件；若额外指定了其他场和边界，它们还需要单独满足保持条件。
+\end{itemize}
+\textbf{前后联系}\quad 第04期把向量场积分成流并计算括号；本期用流的拉回比较张量，从而解释括号为何是向量场的 Lie 导数。下一单元是内乘与 Cartan 魔术公式，届时将把形式的 Lie 导数写成外微分与内乘的组合。本期没有借用该公式，避免以尚未建立的工具替代定义。
+
+\textbf{参考资料}\quad David Tong, \emph{General Relativity}, 第2章 §2.2.4（向量的 Lie 导数）及 §2.3.2（一形式的 Lie 导数）。
+\href{https://www.damtp.cam.ac.uk/user/tong/gr/grhtml/S2.html}{剑桥大学讲义网页版}，2026-11-25查阅。参考仅用于核对定义与变换方向；本期推导与习题解答可独立阅读。
+
+\textbf{系列记录}\quad 本期05；核心技能：由流的拉回求 Lie 导数，辨认基底贡献，检验完整场配置。题目指纹：$y\partial_x$ 对 $\D x,\partial_y$ 的剪切与配对；$x\partial_y$ 对 $y\D x^2+\D y^2$ 的有限拉回；AdS$_2$ 的 $K=(t^2+z^2)\partial_t+2tz\partial_z$ 与 $\phi=a/z$。下一单元06：内乘与 Cartan 魔术公式。完成与掌握状态待用户反馈。
+\end{document}
